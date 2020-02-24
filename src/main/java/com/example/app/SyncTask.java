@@ -41,15 +41,20 @@ public class SyncTask extends TimerTask {
     private long sync(final Mapper srcMapper, final Mapper dstMapper, final String name) {
         long latestId = srcMapper.getLatestId();
         long tailId = dstMapper.getLatestId();
+        long count = 0;
         for (long i = tailId + 1; i <= latestId; ++i) {
             Model model = srcMapper.getById(i);
+            if (model == null) {
+                LOGGER.warn("Failed to fetch " + name + " with id " + i);
+                break;
+            }
+            ++count;
             dstMapper.insert(model);
         }
-        long update = latestId - tailId;
-        if (update > 0) {
-            LOGGER.info("Sync " + update + " for " + name);
+        if (count > 0) {
+            LOGGER.info("Sync " + count + " for " + name);
         }
-        return update;
+        return count;
     }
 
     /**
