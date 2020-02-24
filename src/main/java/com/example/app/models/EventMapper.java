@@ -13,7 +13,7 @@ public interface EventMapper extends Mapper {
      * Create schema.
      */
     @Update({
-        "CREATE TABLE event (",
+        "CREATE TABLE IF NOT EXISTS event (",
         "   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,",
         "   `time` BIGINT NOT NULL,",
         "   PRIMARY KEY (`id`))",

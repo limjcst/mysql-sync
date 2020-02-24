@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.util.Timer;
 
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
@@ -43,13 +44,23 @@ public final class Syncer {
         return factory;
     }
 
+    private static void createSchema(final SqlSessionFactory factory) {
+        try (SqlSession session = factory.openSession()) {
+            session.getMapper(EventMapper.class).schema();
+        }
+    }
+
     /**
      * Entrance.
      * @param args Command line arguments
      */
     public static void main(final String[] args) {
-        SqlSessionFactory srcFactory = prepareSqlSessionFactory(srcResource);
         SqlSessionFactory dstFactory = prepareSqlSessionFactory(dstResource);
+        if (args.length > 0 && args[0].equals("migrate")) {
+            createSchema(dstFactory);
+            return;
+        }
+        SqlSessionFactory srcFactory = prepareSqlSessionFactory(srcResource);
 
         Timer timer = new Timer();
         timer.schedule(new SyncTask(srcFactory, dstFactory), 0, INTERVAL);
