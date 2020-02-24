@@ -16,13 +16,14 @@ public interface DSChainMapper extends Mapper {
      */
     @Update({
         "CREATE TABLE IF NOT EXISTS ${tablename} (",
-        "   `No` INT UNSIGNED AUTO_INCREMENT,",
+        "   `No` BIGINT UNSIGNED AUTO_INCREMENT,",
         "   `startTime` BIGINT UNSIGNED,",
         "   `elapsedTime` DOUBLE UNSIGNED,",
         "   `success` VARCHAR(7),",
         "   `traceId` VARCHAR(63),",
         "   `id` VARCHAR(63),",
         "   `dsName` VARCHAR(15),",
+        "   INDEX (startTime),",
         "   PRIMARY KEY (`No`))",
     })
     void schema(@Param("tablename") String tableName);

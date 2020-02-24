@@ -16,13 +16,14 @@ public interface BusinessIndexMapper extends Mapper {
      */
     @Update({
         "CREATE TABLE IF NOT EXISTS ${tablename} (",
-        "   `No` INT UNSIGNED AUTO_INCREMENT,",
+        "   `No` BIGINT UNSIGNED AUTO_INCREMENT,",
         "   `serviceName` VARCHAR(15),",
         "   `startTime` BIGINT UNSIGNED,",
         "   `avg_time` DOUBLE UNSIGNED,",
         "   `num` INT UNSIGNED,",
         "   `succee_num` INT UNSIGNED,",
         "   `succee_rate` DOUBLE UNSIGNED,",
+        "   INDEX (startTime),",
         "   PRIMARY KEY (`No`))",
     })
     void schema(@Param("tablename") String tableName);

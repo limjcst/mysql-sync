@@ -16,13 +16,14 @@ public interface PlatformIndexMapper extends Mapper {
      */
     @Update({
         "CREATE TABLE IF NOT EXISTS ${tablename} (",
-        "   `No` INT UNSIGNED AUTO_INCREMENT,",
+        "   `No` BIGINT UNSIGNED AUTO_INCREMENT,",
         "   `stack` VARCHAR(20),",
         "   `itemid` BIGINT UNSIGNED,",
         "   `name` VARCHAR(63),",
         "   `timestamp` BIGINT UNSIGNED,",
         "   `value` VARCHAR(1024),",
         "   `cmdb_id` VARCHAR(63),",
+        "   INDEX (timestamp),",
         "   PRIMARY KEY (`No`))",
     })
     void schema(@Param("tablename") String tableName);
