@@ -1,6 +1,13 @@
 package com.example.app;
 
-import com.example.app.models.EventMapper;
+import com.example.app.models.PlatformIndex;
+import com.example.app.models.PlatformIndexMapper;
+import com.example.app.models.ServiceChain;
+import com.example.app.models.ServiceChainMapper;
+import com.example.app.models.DSChain;
+import com.example.app.models.DSChainMapper;
+import com.example.app.models.BusinessIndex;
+import com.example.app.models.BusinessIndexMapper;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -39,14 +46,35 @@ public final class Syncer {
             return null;
         }
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader);
-        factory.getConfiguration().addMapper(EventMapper.class);
+        factory.getConfiguration().addMapper(PlatformIndexMapper.class);
+        factory.getConfiguration().addMapper(ServiceChainMapper.class);
+        factory.getConfiguration().addMapper(DSChainMapper.class);
+        factory.getConfiguration().addMapper(BusinessIndexMapper.class);
 
         return factory;
     }
 
     private static void createSchema(final SqlSessionFactory factory) {
         try (SqlSession session = factory.openSession()) {
-            session.getMapper(EventMapper.class).schema();
+            PlatformIndexMapper platformIndexMapper = session.getMapper(PlatformIndexMapper.class);
+            for (String name : PlatformIndex.TABLE_NAMES) {
+                platformIndexMapper.schema(name);
+            }
+
+            ServiceChainMapper serviceChainMapper = session.getMapper(ServiceChainMapper.class);
+            for (String name : ServiceChain.TABLE_NAMES) {
+                serviceChainMapper.schema(name);
+            }
+
+            DSChainMapper dsChainMapper = session.getMapper(DSChainMapper.class);
+            for (String name : DSChain.TABLE_NAMES) {
+                dsChainMapper.schema(name);
+            }
+
+            BusinessIndexMapper businessIndexMapper = session.getMapper(BusinessIndexMapper.class);
+            for (String name : BusinessIndex.TABLE_NAMES) {
+                businessIndexMapper.schema(name);
+            }
         }
     }
 
