@@ -5,7 +5,7 @@ import com.example.app.models.PlatformIndexMapper;
 
 import org.apache.ibatis.session.SqlSession;
 
-public class PlatformIndexSyncer extends Syncer {
+public class PlatformIndexSyncer extends Syncer<PlatformIndex, PlatformIndexMapper> {
 
     /**
      * Batch size for bulk sql operation.
@@ -14,51 +14,29 @@ public class PlatformIndexSyncer extends Syncer {
     public static final int BATCH_SIZE = 256;
 
     /**
-     * Mapper for source database.
-     */
-    private PlatformIndexMapper srcMapper = null;
-    /**
-     * Mapper for destination database.
-     */
-    private PlatformIndexMapper dstMapper = null;
-
-    /**
      * Construct method.
      * @param dstSession Session for destination database
      * @param srcMapper Mapper for source database
      */
     public PlatformIndexSyncer(final SqlSession dstSession, final PlatformIndexMapper srcMapper) {
-        setDstSession(dstSession);
-        this.srcMapper = srcMapper;
-        this.dstMapper = dstSession.getMapper(PlatformIndexMapper.class);
+        super(dstSession, srcMapper, dstSession.getMapper(PlatformIndexMapper.class));
     }
 
     /**
-     * Synchronize.
-     * @param name Name of the table with structure of PlatformIndex
-     * @return Number of items sychronized
+     * Get batch size.
+     * @return batch size
      */
-    public long sync(final String name) {
-        long latestId = srcMapper.getLatestId(name);
-        long tailId = dstMapper.getLatestId(name);
-        long count = 0;
-        for (long i = tailId + 1; i <= latestId; ++i) {
-            PlatformIndex model = srcMapper.getById(i, name);
-            if (model == null) {
-                LOGGER.warn("Failed to fetch " + name + " with id " + i);
-                break;
-            }
-            ++count;
-            dstMapper.insert(model, name);
-            if (count % BATCH_SIZE == 0) {
-                commit();
-            }
-        }
-        if (count > 0) {
-            commit();
-            LOGGER.info("Sync " + count + " for " + name);
-        }
-        return count;
+    public long getBatchSize() {
+        return BATCH_SIZE;
+    }
+
+    /**
+     * Get identifier of model.
+     * @param model model
+     * @return identifier
+     */
+    protected long getId(final PlatformIndex model) {
+        return model.getId();
     }
 
 }

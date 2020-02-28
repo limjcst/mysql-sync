@@ -1,5 +1,7 @@
 package com.example.app.models;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
@@ -8,7 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.type.JdbcType;
 
-public interface BusinessIndexMapper extends Mapper {
+public interface BusinessIndexMapper extends Mapper<BusinessIndex> {
 
     /**
      * Create schema.
@@ -29,13 +31,14 @@ public interface BusinessIndexMapper extends Mapper {
     void schema(@Param("tablename") String tableName);
 
     /**
-     * Get an index with id.
-     * @param id id of the target index
+     * Get indices with range of id.
+     * @param start start id of the target index range
+     * @param end next id of the target index range
      * @param tableName The table to be operated on
      * @return required index
      */
     @Select({
-        "SELECT * FROM ${tablename} WHERE No = #{id}"
+        "SELECT * FROM ${tablename} WHERE No >= #{start} and No < #{end} ORDER BY No ASC"
     })
     @Results({
         @Result(column = "No", property = "id", jdbcType = JdbcType.BIGINT, id = true),
@@ -46,7 +49,8 @@ public interface BusinessIndexMapper extends Mapper {
         @Result(column = "succee_num", property = "succeeNum", jdbcType = JdbcType.BIGINT),
         @Result(column = "succee_rate", property = "succeeRate", jdbcType = JdbcType.DOUBLE),
     })
-    BusinessIndex getById(@Param("id") long id, @Param("tablename") String tableName);
+    List<BusinessIndex> getByRange(@Param("start") long start, @Param("end") long end,
+                                   @Param("tablename") String tableName);
 
     /**
      * Insert a BusinessIndex.

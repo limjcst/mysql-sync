@@ -1,9 +1,11 @@
 package com.example.app.models;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-public interface Mapper {
+public interface Mapper<M extends Model> {
 
     /**
      * Get the id of the latest model.
@@ -16,12 +18,13 @@ public interface Mapper {
     Long getLatestId(@Param("tablename") String tableName);
 
     /**
-     * Get a model with id.
-     * @param id id of the target model
+     * Get indices with range of id.
+     * @param start start id of the target index range
+     * @param end next id of the target index range
      * @param tableName The table to be operated on
      * @return required model
      */
-    Model getById(long id, String tableName);
+    List<M> getByRange(long start, long end, String tableName);
 
     /**
      * Insert a model.
@@ -29,6 +32,6 @@ public interface Mapper {
      * @param tableName The table to be operated on
      * @return id
      */
-    long insert(Model model, String tableName);
+    long insert(M model, String tableName);
 
 }

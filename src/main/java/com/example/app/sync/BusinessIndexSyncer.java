@@ -5,7 +5,7 @@ import com.example.app.models.BusinessIndexMapper;
 
 import org.apache.ibatis.session.SqlSession;
 
-public class BusinessIndexSyncer extends Syncer {
+public class BusinessIndexSyncer extends Syncer<BusinessIndex, BusinessIndexMapper> {
 
     /**
      * Batch size for bulk sql operation.
@@ -14,51 +14,29 @@ public class BusinessIndexSyncer extends Syncer {
     public static final int BATCH_SIZE = 4096;
 
     /**
-     * Mapper for source database.
-     */
-    private BusinessIndexMapper srcMapper = null;
-    /**
-     * Mapper for destination database.
-     */
-    private BusinessIndexMapper dstMapper = null;
-
-    /**
      * Construct method.
      * @param dstSession Session for destination database
      * @param srcMapper Mapper for source database
      */
     public BusinessIndexSyncer(final SqlSession dstSession, final BusinessIndexMapper srcMapper) {
-        setDstSession(dstSession);
-        this.srcMapper = srcMapper;
-        this.dstMapper = dstSession.getMapper(BusinessIndexMapper.class);
+        super(dstSession, srcMapper, dstSession.getMapper(BusinessIndexMapper.class));
     }
 
     /**
-     * Synchronize.
-     * @param name Name of the table with structure of BusinessIndex
-     * @return Number of items sychronized
+     * Get batch size.
+     * @return batch size
      */
-    public long sync(final String name) {
-        long latestId = srcMapper.getLatestId(name);
-        long tailId = dstMapper.getLatestId(name);
-        long count = 0;
-        for (long i = tailId + 1; i <= latestId; ++i) {
-            BusinessIndex model = srcMapper.getById(i, name);
-            if (model == null) {
-                LOGGER.warn("Failed to fetch " + name + " with id " + i);
-                break;
-            }
-            ++count;
-            dstMapper.insert(model, name);
-            if (count % BATCH_SIZE == 0) {
-                commit();
-            }
-        }
-        if (count > 0) {
-            commit();
-            LOGGER.info("Sync " + count + " for " + name);
-        }
-        return count;
+    public long getBatchSize() {
+        return BATCH_SIZE;
+    }
+
+    /**
+     * Get identifier of model.
+     * @param model model
+     * @return identifier
+     */
+    protected long getId(final BusinessIndex model) {
+        return model.getId();
     }
 
 }

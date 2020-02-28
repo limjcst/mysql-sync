@@ -5,7 +5,7 @@ import com.example.app.models.DSChainMapper;
 
 import org.apache.ibatis.session.SqlSession;
 
-public class DSChainSyncer extends Syncer {
+public class DSChainSyncer extends Syncer<DSChain, DSChainMapper> {
 
     /**
      * Batch size for bulk sql operation.
@@ -14,51 +14,29 @@ public class DSChainSyncer extends Syncer {
     public static final int BATCH_SIZE = 1024;
 
     /**
-     * Mapper for source database.
-     */
-    private DSChainMapper srcMapper = null;
-    /**
-     * Mapper for destination database.
-     */
-    private DSChainMapper dstMapper = null;
-
-    /**
      * Construct method.
      * @param dstSession Session for destination database
      * @param srcMapper Mapper for source database
      */
     public DSChainSyncer(final SqlSession dstSession, final DSChainMapper srcMapper) {
-        setDstSession(dstSession);
-        this.srcMapper = srcMapper;
-        this.dstMapper = dstSession.getMapper(DSChainMapper.class);
+        super(dstSession, srcMapper, dstSession.getMapper(DSChainMapper.class));
     }
 
     /**
-     * Synchronize.
-     * @param name Name of the table with structure of DSChain
-     * @return Number of items sychronized
+     * Get batch size.
+     * @return batch size
      */
-    public long sync(final String name) {
-        long latestId = srcMapper.getLatestId(name);
-        long tailId = dstMapper.getLatestId(name);
-        long count = 0;
-        for (long i = tailId + 1; i <= latestId; ++i) {
-            DSChain model = srcMapper.getById(i, name);
-            if (model == null) {
-                LOGGER.warn("Failed to fetch " + name + " with id " + i);
-                break;
-            }
-            ++count;
-            dstMapper.insert(model, name);
-            if (count % BATCH_SIZE == 0) {
-                commit();
-            }
-        }
-        if (count > 0) {
-            commit();
-            LOGGER.info("Sync " + count + " for " + name);
-        }
-        return count;
+    public long getBatchSize() {
+        return BATCH_SIZE;
+    }
+
+    /**
+     * Get identifier of model.
+     * @param model model
+     * @return identifier
+     */
+    protected long getId(final DSChain model) {
+        return model.getNo();
     }
 
 }
