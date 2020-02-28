@@ -18,12 +18,20 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 public final class Syncer {
 
     /**
      * Frequency for synchronization in milliseconds.
      */
     private static final int INTERVAL = 1000;
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = LogManager.getLogger(Syncer.class);
 
     /**
      * Configuration for source database.
@@ -90,6 +98,7 @@ public final class Syncer {
         }
         SqlSessionFactory srcFactory = prepareSqlSessionFactory(srcResource);
 
+        LOGGER.info("Start to sync");
         Timer timer = new Timer();
         timer.schedule(new SyncTask(srcFactory, dstFactory), 0, INTERVAL);
     }

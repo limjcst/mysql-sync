@@ -9,8 +9,15 @@ import com.example.app.models.DSChainMapper;
 import com.example.app.models.BusinessIndex;
 import com.example.app.models.BusinessIndexMapper;
 
+import com.example.app.sync.Syncer;
+import com.example.app.sync.PlatformIndexSyncer;
+import com.example.app.sync.ServiceChainSyncer;
+import com.example.app.sync.DSChainSyncer;
+import com.example.app.sync.BusinessIndexSyncer;
+
 import java.util.TimerTask;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -43,114 +50,34 @@ public class SyncTask extends TimerTask {
         this.dstFactory = dstFactory;
     }
 
-    private long sync(final PlatformIndexMapper srcMapper, final PlatformIndexMapper dstMapper,
-                      final String name) {
-        long latestId = srcMapper.getLatestId(name);
-        long tailId = dstMapper.getLatestId(name);
-        long count = 0;
-        for (long i = tailId + 1; i <= latestId; ++i) {
-            PlatformIndex model = srcMapper.getById(i, name);
-            if (model == null) {
-                LOGGER.warn("Failed to fetch " + name + " with id " + i);
-                break;
-            }
-            ++count;
-            dstMapper.insert(model, name);
-        }
-        if (count > 0) {
-            LOGGER.info("Sync " + count + " for " + name);
-        }
-        return count;
-    }
-
-    private long sync(final ServiceChainMapper srcMapper, final ServiceChainMapper dstMapper,
-                      final String name) {
-        long latestId = srcMapper.getLatestId(name);
-        long tailId = dstMapper.getLatestId(name);
-        long count = 0;
-        for (long i = tailId + 1; i <= latestId; ++i) {
-            ServiceChain model = srcMapper.getById(i, name);
-            if (model == null) {
-                LOGGER.warn("Failed to fetch " + name + " with id " + i);
-                break;
-            }
-            ++count;
-            dstMapper.insert(model, name);
-        }
-        if (count > 0) {
-            LOGGER.info("Sync " + count + " for " + name);
-        }
-        return count;
-    }
-
-    private long sync(final DSChainMapper srcMapper, final DSChainMapper dstMapper,
-                      final String name) {
-        long latestId = srcMapper.getLatestId(name);
-        long tailId = dstMapper.getLatestId(name);
-        long count = 0;
-        for (long i = tailId + 1; i <= latestId; ++i) {
-            DSChain model = srcMapper.getById(i, name);
-            if (model == null) {
-                LOGGER.warn("Failed to fetch " + name + " with id " + i);
-                break;
-            }
-            ++count;
-            dstMapper.insert(model, name);
-        }
-        if (count > 0) {
-            LOGGER.info("Sync " + count + " for " + name);
-        }
-        return count;
-    }
-
-    private long sync(final BusinessIndexMapper srcMapper, final BusinessIndexMapper dstMapper,
-                      final String name) {
-        long latestId = srcMapper.getLatestId(name);
-        long tailId = dstMapper.getLatestId(name);
-        long count = 0;
-        for (long i = tailId + 1; i <= latestId; ++i) {
-            BusinessIndex model = srcMapper.getById(i, name);
-            if (model == null) {
-                LOGGER.warn("Failed to fetch " + name + " with id " + i);
-                break;
-            }
-            ++count;
-            dstMapper.insert(model, name);
-        }
-        if (count > 0) {
-            LOGGER.info("Sync " + count + " for " + name);
-        }
-        return count;
-    }
-
     /**
      * Call sync for each table.
      */
     public void run() {
         try (SqlSession srcSession = srcFactory.openSession();
-             SqlSession dstSession = dstFactory.openSession()) {
+             SqlSession dstSession = dstFactory.openSession(ExecutorType.BATCH)) {
             PlatformIndexMapper srcPIMapper = srcSession.getMapper(PlatformIndexMapper.class);
-            PlatformIndexMapper dstPIMapper = dstSession.getMapper(PlatformIndexMapper.class);
+            Syncer syncer = new PlatformIndexSyncer(dstSession, srcPIMapper);
             for (String name : PlatformIndex.TABLE_NAMES) {
-                sync(srcPIMapper, dstPIMapper, name);
+                syncer.sync(name);
             }
 
             ServiceChainMapper srcSCMapper = srcSession.getMapper(ServiceChainMapper.class);
-            ServiceChainMapper dstSCMapper = dstSession.getMapper(ServiceChainMapper.class);
+            syncer = new ServiceChainSyncer(dstSession, srcSCMapper);
             for (String name : ServiceChain.TABLE_NAMES) {
-                sync(srcSCMapper, dstSCMapper, name);
+                syncer.sync(name);
             }
 
             DSChainMapper srcDCMapper = srcSession.getMapper(DSChainMapper.class);
-            DSChainMapper dstDCMapper = dstSession.getMapper(DSChainMapper.class);
+            syncer = new DSChainSyncer(dstSession, srcDCMapper);
             for (String name : DSChain.TABLE_NAMES) {
-                sync(srcDCMapper, dstDCMapper, name);
+                syncer.sync(name);
             }
 
             BusinessIndexMapper srcBIMapper = srcSession.getMapper(BusinessIndexMapper.class);
-            BusinessIndexMapper dstBIMapper = dstSession.getMapper(BusinessIndexMapper.class);
+            syncer = new BusinessIndexSyncer(dstSession, srcBIMapper);
             for (String name : BusinessIndex.TABLE_NAMES) {
-                sync(srcBIMapper, dstBIMapper, name);
+                syncer.sync(name);
             }
 
             dstSession.commit();
