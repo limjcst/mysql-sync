@@ -17,12 +17,11 @@ public interface PlatformIndexMapper extends Mapper {
     @Update({
         "CREATE TABLE IF NOT EXISTS ${tablename} (",
         "   `No` BIGINT UNSIGNED AUTO_INCREMENT,",
-        "   `stack` VARCHAR(20),",
         "   `itemid` BIGINT UNSIGNED,",
         "   `name` VARCHAR(63),",
         "   `timestamp` BIGINT UNSIGNED,",
         "   `value` VARCHAR(1024),",
-        "   `cmdb_id` VARCHAR(63),",
+        "   `cmdb_id` VARCHAR(15),",
         "   INDEX (timestamp),",
         "   PRIMARY KEY (`No`))",
     })
@@ -39,7 +38,6 @@ public interface PlatformIndexMapper extends Mapper {
     })
     @Results({
         @Result(column = "No", property = "id", jdbcType = JdbcType.BIGINT, id = true),
-        @Result(column = "stack", property = "stack", jdbcType = JdbcType.VARCHAR),
         @Result(column = "itemid", property = "itemId", jdbcType = JdbcType.BIGINT),
         @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR),
         @Result(column = "timestamp", property = "timestamp", jdbcType = JdbcType.BIGINT),
@@ -55,8 +53,8 @@ public interface PlatformIndexMapper extends Mapper {
      * @return id
      */
     @Insert({
-        "INSERT INTO ${tablename} (No, stack, itemid, name, timestamp, value, cmdb_id)",
-        "VALUES (#{model.id}, #{model.stack}, #{model.itemId}, #{model.name}, #{model.timestamp},",
+        "INSERT INTO ${tablename} (No, itemid, name, timestamp, value, cmdb_id)",
+        "VALUES (#{model.id}, #{model.itemId}, #{model.name}, #{model.timestamp},",
         "   #{model.value}, #{model.cmdbId})",
     })
     long insert(@Param("model") PlatformIndex index, @Param("tablename") String tableName);

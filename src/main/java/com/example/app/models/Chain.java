@@ -26,6 +26,10 @@ public class Chain extends Model {
      * id.
      */
     private String id;
+    /**
+     * pid.
+     */
+    private String pid;
 
     public final long getNo() {
         return no;
@@ -73,6 +77,14 @@ public class Chain extends Model {
 
     public final void setId(final String id) {
         this.id = id;
+    }
+
+    public final String getPid() {
+        return pid;
+    }
+
+    public final void setPid(final String pid) {
+        this.pid = pid;
     }
 
 }

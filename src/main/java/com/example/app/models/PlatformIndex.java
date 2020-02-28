@@ -19,10 +19,6 @@ public final class PlatformIndex extends Model {
      */
     private long id = -1;
     /**
-     * stack.
-     */
-    private String stack;
-    /**
      * id for item.
      */
     private long itemId;
@@ -49,14 +45,6 @@ public final class PlatformIndex extends Model {
 
     public void setId(final long id) {
         this.id = id;
-    }
-
-    public String getStack() {
-        return stack;
-    }
-
-    public void setStack(final String stack) {
-        this.stack = stack;
     }
 
     public long getItemId() {

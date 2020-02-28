@@ -22,6 +22,7 @@ public interface DSChainMapper extends Mapper {
         "   `success` VARCHAR(7),",
         "   `traceId` VARCHAR(63),",
         "   `id` VARCHAR(63),",
+        "   `pid` VARCHAR(63),",
         "   `dsName` VARCHAR(15),",
         "   INDEX (startTime),",
         "   PRIMARY KEY (`No`))",
@@ -44,6 +45,7 @@ public interface DSChainMapper extends Mapper {
         @Result(column = "success", property = "success", jdbcType = JdbcType.VARCHAR),
         @Result(column = "traceId", property = "traceId", jdbcType = JdbcType.VARCHAR),
         @Result(column = "id", property = "id", jdbcType = JdbcType.VARCHAR),
+        @Result(column = "pid", property = "pid", jdbcType = JdbcType.VARCHAR),
         @Result(column = "dsName", property = "dsName", jdbcType = JdbcType.VARCHAR),
     })
     DSChain getById(@Param("id") long id, @Param("tablename") String tableName);
@@ -55,9 +57,9 @@ public interface DSChainMapper extends Mapper {
      * @return id
      */
     @Insert({
-        "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, dsName)",
+        "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, pid, dsName)",
         "VALUES (#{model.no}, #{model.startTime}, #{model.elapsedTime}, #{model.success},",
-        "   #{model.traceId}, #{model.id}, #{model.dsName})",
+        "   #{model.traceId}, #{model.id}, #{model.pid}, #{model.dsName})",
     })
     long insert(@Param("model") DSChain chain, @Param("tablename") String tableName);
 
