@@ -1,5 +1,6 @@
 package com.example.app;
 
+import com.example.app.models.Mapper;
 import com.example.app.models.PlatformIndex;
 import com.example.app.models.PlatformIndexMapper;
 import com.example.app.models.ServiceChain;
@@ -86,6 +87,31 @@ public final class Syncer {
         }
     }
 
+    private static void summary(final SqlSessionFactory factory, final String dbName) {
+        LOGGER.info("Summary for database " + dbName);
+        try (SqlSession session = factory.openSession()) {
+            Mapper mapper = session.getMapper(PlatformIndexMapper.class);
+            for (String name : PlatformIndex.TABLE_NAMES) {
+                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+            }
+
+            mapper = session.getMapper(ServiceChainMapper.class);
+            for (String name : ServiceChain.TABLE_NAMES) {
+                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+            }
+
+            mapper = session.getMapper(DSChainMapper.class);
+            for (String name : DSChain.TABLE_NAMES) {
+                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+            }
+
+            mapper = session.getMapper(BusinessIndexMapper.class);
+            for (String name : BusinessIndex.TABLE_NAMES) {
+                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+            }
+        }
+    }
+
     /**
      * Entrance.
      * @param args Command line arguments
@@ -96,6 +122,7 @@ public final class Syncer {
         createSchema(dstFactory);
         LOGGER.info("Configuring source database");
         SqlSessionFactory srcFactory = prepareSqlSessionFactory(srcResource);
+        summary(srcFactory, "source");
 
         LOGGER.info("Ready for sync");
 

@@ -8,6 +8,16 @@ import org.apache.ibatis.annotations.Select;
 public interface Mapper<M extends Model> {
 
     /**
+     * Count models.
+     * @param tableName The table to be operated on
+     * @return number of models
+     */
+    @Select({
+        "SELECT COUNT(*) FROM ${tablename}"
+    })
+    long getCount(@Param("tablename") String tableName);
+
+    /**
      * Get the id of the latest model.
      * @param tableName The table to be operated on
      * @return id of the latest model, 0 if there is no model
