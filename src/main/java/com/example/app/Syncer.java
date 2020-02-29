@@ -91,14 +91,14 @@ public final class Syncer {
      * @param args Command line arguments
      */
     public static void main(final String[] args) {
+        LOGGER.info("Preparing target database schema");
         SqlSessionFactory dstFactory = prepareSqlSessionFactory(dstResource);
-        if (args.length > 0 && args[0].equals("migrate")) {
-            createSchema(dstFactory);
-            return;
-        }
+        createSchema(dstFactory);
+        LOGGER.info("Configuring source database");
         SqlSessionFactory srcFactory = prepareSqlSessionFactory(srcResource);
 
-        LOGGER.info("Start to sync");
+        LOGGER.info("Ready for sync");
+
         Timer timer = new Timer();
         timer.schedule(new SyncTask(srcFactory, dstFactory), 0, INTERVAL);
     }

@@ -54,6 +54,7 @@ public class SyncTask extends TimerTask {
      * Call sync for each table.
      */
     public void run() {
+        LOGGER.info("Start to sync");
         try (SqlSession srcSession = srcFactory.openSession();
              SqlSession dstSession = dstFactory.openSession(ExecutorType.BATCH)) {
             PlatformIndexMapper srcPIMapper = srcSession.getMapper(PlatformIndexMapper.class);
