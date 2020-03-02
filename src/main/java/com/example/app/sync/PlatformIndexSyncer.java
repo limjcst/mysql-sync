@@ -4,6 +4,7 @@ import com.example.app.models.PlatformIndex;
 import com.example.app.models.PlatformIndexMapper;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class PlatformIndexSyncer extends Syncer<PlatformIndex, PlatformIndexMapper> {
 
@@ -15,11 +16,11 @@ public class PlatformIndexSyncer extends Syncer<PlatformIndex, PlatformIndexMapp
 
     /**
      * Construct method.
-     * @param dstSession Session for destination database
-     * @param srcMapper Mapper for source database
+     * @param srcFactory Session factory for source database.
+     * @param dstFactory Session factory for destination database.
      */
-    public PlatformIndexSyncer(final SqlSession dstSession, final PlatformIndexMapper srcMapper) {
-        super(dstSession, srcMapper, dstSession.getMapper(PlatformIndexMapper.class));
+    public PlatformIndexSyncer(final SqlSessionFactory srcFactory, final SqlSessionFactory dstFactory) {
+        super(srcFactory, dstFactory);
     }
 
     /**
@@ -37,6 +38,15 @@ public class PlatformIndexSyncer extends Syncer<PlatformIndex, PlatformIndexMapp
      */
     protected long getId(final PlatformIndex model) {
         return model.getId();
+    }
+
+    /**
+     * Get mapper.
+     * @param session Sql session
+     * @return mapper
+     */
+    protected PlatformIndexMapper getMapper(final SqlSession session) {
+        return session.getMapper(PlatformIndexMapper.class);
     }
 
 }

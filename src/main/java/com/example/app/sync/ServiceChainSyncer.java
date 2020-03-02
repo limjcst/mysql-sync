@@ -4,6 +4,7 @@ import com.example.app.models.ServiceChain;
 import com.example.app.models.ServiceChainMapper;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ServiceChainSyncer extends Syncer<ServiceChain, ServiceChainMapper> {
 
@@ -15,11 +16,11 @@ public class ServiceChainSyncer extends Syncer<ServiceChain, ServiceChainMapper>
 
     /**
      * Construct method.
-     * @param dstSession Session for destination database
-     * @param srcMapper Mapper for source database
+     * @param srcFactory Session factory for source database.
+     * @param dstFactory Session factory for destination database.
      */
-    public ServiceChainSyncer(final SqlSession dstSession, final ServiceChainMapper srcMapper) {
-        super(dstSession, srcMapper, dstSession.getMapper(ServiceChainMapper.class));
+    public ServiceChainSyncer(final SqlSessionFactory srcFactory, final SqlSessionFactory dstFactory) {
+        super(srcFactory, dstFactory);
     }
 
     /**
@@ -37,6 +38,15 @@ public class ServiceChainSyncer extends Syncer<ServiceChain, ServiceChainMapper>
      */
     protected long getId(final ServiceChain model) {
         return model.getNo();
+    }
+
+    /**
+     * Get mapper.
+     * @param session Sql session
+     * @return mapper
+     */
+    protected ServiceChainMapper getMapper(final SqlSession session) {
+        return session.getMapper(ServiceChainMapper.class);
     }
 
 }

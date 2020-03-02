@@ -1,13 +1,9 @@
 package com.example.app;
 
 import com.example.app.models.PlatformIndex;
-import com.example.app.models.PlatformIndexMapper;
 import com.example.app.models.ServiceChain;
-import com.example.app.models.ServiceChainMapper;
 import com.example.app.models.DSChain;
-import com.example.app.models.DSChainMapper;
 import com.example.app.models.BusinessIndex;
-import com.example.app.models.BusinessIndexMapper;
 
 import com.example.app.sync.Syncer;
 import com.example.app.sync.PlatformIndexSyncer;
@@ -17,8 +13,6 @@ import com.example.app.sync.BusinessIndexSyncer;
 
 import java.util.TimerTask;
 
-import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import org.apache.logging.log4j.Logger;
@@ -55,33 +49,24 @@ public class SyncTask extends TimerTask {
      */
     public void run() {
         LOGGER.info("Start to sync");
-        try (SqlSession srcSession = srcFactory.openSession();
-             SqlSession dstSession = dstFactory.openSession(ExecutorType.BATCH)) {
-            PlatformIndexMapper srcPIMapper = srcSession.getMapper(PlatformIndexMapper.class);
-            Syncer syncer = new PlatformIndexSyncer(dstSession, srcPIMapper);
-            for (String name : PlatformIndex.TABLE_NAMES) {
-                syncer.sync(name);
-            }
+        Syncer syncer = new PlatformIndexSyncer(srcFactory, dstFactory);
+        for (String name : PlatformIndex.TABLE_NAMES) {
+            syncer.sync(name);
+        }
 
-            ServiceChainMapper srcSCMapper = srcSession.getMapper(ServiceChainMapper.class);
-            syncer = new ServiceChainSyncer(dstSession, srcSCMapper);
-            for (String name : ServiceChain.TABLE_NAMES) {
-                syncer.sync(name);
-            }
+        syncer = new ServiceChainSyncer(srcFactory, dstFactory);
+        for (String name : ServiceChain.TABLE_NAMES) {
+            syncer.sync(name);
+        }
 
-            DSChainMapper srcDCMapper = srcSession.getMapper(DSChainMapper.class);
-            syncer = new DSChainSyncer(dstSession, srcDCMapper);
-            for (String name : DSChain.TABLE_NAMES) {
-                syncer.sync(name);
-            }
+        syncer = new DSChainSyncer(srcFactory, dstFactory);
+        for (String name : DSChain.TABLE_NAMES) {
+            syncer.sync(name);
+        }
 
-            BusinessIndexMapper srcBIMapper = srcSession.getMapper(BusinessIndexMapper.class);
-            syncer = new BusinessIndexSyncer(dstSession, srcBIMapper);
-            for (String name : BusinessIndex.TABLE_NAMES) {
-                syncer.sync(name);
-            }
-
-            dstSession.commit();
+        syncer = new BusinessIndexSyncer(srcFactory, dstFactory);
+        for (String name : BusinessIndex.TABLE_NAMES) {
+            syncer.sync(name);
         }
     }
 

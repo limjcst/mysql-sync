@@ -4,6 +4,7 @@ import com.example.app.models.DSChain;
 import com.example.app.models.DSChainMapper;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class DSChainSyncer extends Syncer<DSChain, DSChainMapper> {
 
@@ -15,11 +16,11 @@ public class DSChainSyncer extends Syncer<DSChain, DSChainMapper> {
 
     /**
      * Construct method.
-     * @param dstSession Session for destination database
-     * @param srcMapper Mapper for source database
+     * @param srcFactory Session factory for source database.
+     * @param dstFactory Session factory for destination database.
      */
-    public DSChainSyncer(final SqlSession dstSession, final DSChainMapper srcMapper) {
-        super(dstSession, srcMapper, dstSession.getMapper(DSChainMapper.class));
+    public DSChainSyncer(final SqlSessionFactory srcFactory, final SqlSessionFactory dstFactory) {
+        super(srcFactory, dstFactory);
     }
 
     /**
@@ -37,6 +38,15 @@ public class DSChainSyncer extends Syncer<DSChain, DSChainMapper> {
      */
     protected long getId(final DSChain model) {
         return model.getNo();
+    }
+
+    /**
+     * Get mapper.
+     * @param session Sql session
+     * @return mapper
+     */
+    protected DSChainMapper getMapper(final SqlSession session) {
+        return session.getMapper(DSChainMapper.class);
     }
 
 }

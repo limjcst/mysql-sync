@@ -4,6 +4,7 @@ import com.example.app.models.BusinessIndex;
 import com.example.app.models.BusinessIndexMapper;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class BusinessIndexSyncer extends Syncer<BusinessIndex, BusinessIndexMapper> {
 
@@ -15,11 +16,11 @@ public class BusinessIndexSyncer extends Syncer<BusinessIndex, BusinessIndexMapp
 
     /**
      * Construct method.
-     * @param dstSession Session for destination database
-     * @param srcMapper Mapper for source database
+     * @param srcFactory Session factory for source database.
+     * @param dstFactory Session factory for destination database.
      */
-    public BusinessIndexSyncer(final SqlSession dstSession, final BusinessIndexMapper srcMapper) {
-        super(dstSession, srcMapper, dstSession.getMapper(BusinessIndexMapper.class));
+    public BusinessIndexSyncer(final SqlSessionFactory srcFactory, final SqlSessionFactory dstFactory) {
+        super(srcFactory, dstFactory);
     }
 
     /**
@@ -37,6 +38,15 @@ public class BusinessIndexSyncer extends Syncer<BusinessIndex, BusinessIndexMapp
      */
     protected long getId(final BusinessIndex model) {
         return model.getId();
+    }
+
+    /**
+     * Get mapper.
+     * @param session Sql session
+     * @return mapper
+     */
+    protected BusinessIndexMapper getMapper(final SqlSession session) {
+        return session.getMapper(BusinessIndexMapper.class);
     }
 
 }

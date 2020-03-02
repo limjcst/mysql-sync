@@ -5,7 +5,9 @@ import com.example.app.models.Mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -18,28 +20,22 @@ public abstract class Syncer<E extends Model, M extends Mapper> {
     protected static final Logger LOGGER = LogManager.getLogger(Syncer.class);
 
     /**
-     * Session for destination database.
+     * Session factory for source database.
      */
-    private SqlSession dstSession = null;
+    private SqlSessionFactory srcFactory = null;
     /**
-     * Mapper for source database.
+     * Session factory for destination database.
      */
-    private M srcMapper = null;
-    /**
-     * Mapper for destination database.
-     */
-    private M dstMapper = null;
+    private SqlSessionFactory dstFactory = null;
 
     /**
      * Construct method.
-     * @param dstSession Session for destination database
-     * @param srcMapper Mapper for source database
-     * @param dstMapper Mapper for destination database
+     * @param srcFactory Session factory for source database.
+     * @param dstFactory Session factory for destination database.
      */
-    public Syncer(final SqlSession dstSession, final M srcMapper, final M dstMapper) {
-        this.dstSession = dstSession;
-        this.srcMapper = srcMapper;
-        this.dstMapper = dstMapper;
+    public Syncer(final SqlSessionFactory srcFactory, final SqlSessionFactory dstFactory) {
+        this.srcFactory = srcFactory;
+        this.dstFactory = dstFactory;
     }
 
     /**
@@ -48,36 +44,47 @@ public abstract class Syncer<E extends Model, M extends Mapper> {
      * @return Number of items sychronized
      */
     public final long sync(final String name) {
-        long latestId = srcMapper.getLatestId(name);
-        long tailId = dstMapper.getLatestId(name);
         long count = 0;
-        for (long i = tailId + 1; i <= latestId;) {
-            List<E> models = srcMapper.getByRange(i, i + getBatchSize(), name);
-            boolean success = true;
-            for (E model : models) {
-                if (getId(model) != i) {
-                    success = false;
-                    break;
-                }
-                ++i;
-                ++count;
-                dstMapper.insert(model, name);
-            }
-            if (!success) {
-                LOGGER.warn("Failed to fetch " + name + " with id " + i);
+        long batchSize = getBatchSize();
+        for (;;) {
+            long update = syncBatch(name, batchSize);
+            count += update;
+            if (update < batchSize) {
                 break;
             }
-            commit();
         }
+
         if (count > 0) {
             LOGGER.info("Sync " + count + " for " + name);
         }
         return count;
     }
 
-    protected final void commit() {
-        dstSession.commit();
-        dstSession.clearCache();
+    private long syncBatch(final String name, final long batchSize) {
+        long count = 0;
+        try (SqlSession srcSession = srcFactory.openSession();
+             SqlSession dstSession = dstFactory.openSession(ExecutorType.BATCH)) {
+            M srcMapper = getMapper(srcSession);
+            M dstMapper = getMapper(dstSession);
+            long headId = dstMapper.getLatestId(name) + 1;
+
+            List<E> models = srcMapper.getByRange(headId, headId + batchSize, name);
+            boolean success = true;
+            for (E model : models) {
+                if (getId(model) != headId) {
+                    success = false;
+                    break;
+                }
+                ++count;
+                ++headId;
+                dstMapper.insert(model, name);
+            }
+            dstSession.commit();
+            if (!success) {
+                LOGGER.warn("Failed to fetch " + name + " with id " + headId);
+            }
+        }
+        return count;
     }
 
     /**
@@ -87,5 +94,7 @@ public abstract class Syncer<E extends Model, M extends Mapper> {
     public abstract long getBatchSize();
 
     protected abstract long getId(E model);
+
+    protected abstract M getMapper(SqlSession session);
 
 }
