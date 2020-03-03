@@ -40,14 +40,15 @@ public abstract class Syncer<E extends Model, M extends Mapper> {
 
     /**
      * Synchronize.
-     * @param name Name of the table
+     * @param srcName Name of the source table
+     * @param dstName Name of the destination table
      * @return Number of items sychronized
      */
-    public final long sync(final String name) {
+    public final long sync(final String srcName, final String dstName) {
         long count = 0;
         long batchSize = getBatchSize();
         for (;;) {
-            long update = syncBatch(name, batchSize);
+            long update = syncBatch(srcName, dstName, batchSize);
             count += update;
             if (update < batchSize) {
                 break;
@@ -55,20 +56,20 @@ public abstract class Syncer<E extends Model, M extends Mapper> {
         }
 
         if (count > 0) {
-            LOGGER.info("Sync " + count + " for " + name);
+            LOGGER.info("Sync " + count + " for " + srcName);
         }
         return count;
     }
 
-    private long syncBatch(final String name, final long batchSize) {
+    private long syncBatch(final String srcName, final String dstName, final long batchSize) {
         long count = 0;
         try (SqlSession srcSession = srcFactory.openSession();
              SqlSession dstSession = dstFactory.openSession(ExecutorType.BATCH)) {
             M srcMapper = getMapper(srcSession);
             M dstMapper = getMapper(dstSession);
-            long headId = dstMapper.getLatestId(name) + 1;
+            long headId = dstMapper.getLatestId(dstName) + 1;
 
-            List<E> models = srcMapper.getByRange(headId, headId + batchSize, name);
+            List<E> models = srcMapper.getByRange(headId, headId + batchSize, srcName);
             boolean success = true;
             for (E model : models) {
                 if (getId(model) != headId) {
@@ -77,11 +78,11 @@ public abstract class Syncer<E extends Model, M extends Mapper> {
                 }
                 ++count;
                 ++headId;
-                dstMapper.insert(model, name);
+                dstMapper.insert(model, dstName);
             }
             dstSession.commit();
             if (!success) {
-                LOGGER.warn("Failed to fetch " + name + " with id " + headId);
+                LOGGER.warn("Failed to fetch " + srcName + " with id " + headId);
             }
         }
         return count;

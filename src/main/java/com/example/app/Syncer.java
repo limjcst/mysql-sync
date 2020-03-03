@@ -30,6 +30,14 @@ public final class Syncer {
      * Frequency for synchronization in milliseconds.
      */
     private static final int INTERVAL = 1000;
+    /**
+     * Table name prefix for source database.
+     */
+    private static String srcPrefix = "";
+    /**
+     * Table name prefix for destination database.
+     */
+    private static String dstPrefix = "";
 
     /**
      * Logger.
@@ -66,61 +74,65 @@ public final class Syncer {
         return factory;
     }
 
-    private static void createSchema(final SqlSessionFactory factory) {
+    private static void createSchema(final SqlSessionFactory factory, final String prefix) {
         try (SqlSession session = factory.openSession()) {
             PlatformIndexMapper platformIndexMapper = session.getMapper(PlatformIndexMapper.class);
             for (String name : PlatformIndex.TABLE_NAMES) {
-                platformIndexMapper.schema(name);
+                platformIndexMapper.schema(prefix + name);
             }
 
             ChainMapper chainMapper = session.getMapper(ChainMapper.class);
             for (String name : Chain.TABLE_NAMES) {
-                chainMapper.schema(name);
+                chainMapper.schema(prefix + name);
             }
 
             ServiceChainMapper serviceChainMapper = session.getMapper(ServiceChainMapper.class);
             for (String name : ServiceChain.TABLE_NAMES) {
-                serviceChainMapper.schema(name);
+                serviceChainMapper.schema(prefix + name);
             }
 
             DSChainMapper dsChainMapper = session.getMapper(DSChainMapper.class);
             for (String name : DSChain.TABLE_NAMES) {
-                dsChainMapper.schema(name);
+                dsChainMapper.schema(prefix + name);
             }
 
             BusinessIndexMapper businessIndexMapper = session.getMapper(BusinessIndexMapper.class);
             for (String name : BusinessIndex.TABLE_NAMES) {
-                businessIndexMapper.schema(name);
+                businessIndexMapper.schema(prefix + name);
             }
         }
     }
 
-    private static void summary(final SqlSessionFactory factory, final String dbName) {
-        LOGGER.info("Summary for database " + dbName);
+    private static void summary(final SqlSessionFactory factory, final String prefix) {
         try (SqlSession session = factory.openSession()) {
             Mapper mapper = session.getMapper(PlatformIndexMapper.class);
             for (String name : PlatformIndex.TABLE_NAMES) {
-                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+                String tableName = prefix + name;
+                LOGGER.info("There are " + mapper.getCount(tableName) + " rows in table " + tableName);
             }
 
             mapper = session.getMapper(ChainMapper.class);
             for (String name : Chain.TABLE_NAMES) {
-                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+                String tableName = prefix + name;
+                LOGGER.info("There are " + mapper.getCount(tableName) + " rows in table " + tableName);
             }
 
             mapper = session.getMapper(ServiceChainMapper.class);
             for (String name : ServiceChain.TABLE_NAMES) {
-                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+                String tableName = prefix + name;
+                LOGGER.info("There are " + mapper.getCount(tableName) + " rows in table " + tableName);
             }
 
             mapper = session.getMapper(DSChainMapper.class);
             for (String name : DSChain.TABLE_NAMES) {
-                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+                String tableName = prefix + name;
+                LOGGER.info("There are " + mapper.getCount(tableName) + " rows in table " + tableName);
             }
 
             mapper = session.getMapper(BusinessIndexMapper.class);
             for (String name : BusinessIndex.TABLE_NAMES) {
-                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+                String tableName = prefix + name;
+                LOGGER.info("There are " + mapper.getCount(tableName) + " rows in table " + tableName);
             }
         }
     }
@@ -132,15 +144,16 @@ public final class Syncer {
     public static void main(final String[] args) {
         LOGGER.info("Preparing target database schema");
         SqlSessionFactory dstFactory = prepareSqlSessionFactory(dstResource);
-        createSchema(dstFactory);
+        createSchema(dstFactory, dstPrefix);
         LOGGER.info("Configuring source database");
         SqlSessionFactory srcFactory = prepareSqlSessionFactory(srcResource);
-        summary(srcFactory, "source");
+        LOGGER.info("Summary for source database");
+        summary(srcFactory, srcPrefix);
 
         LOGGER.info("Ready for sync");
 
         Timer timer = new Timer();
-        timer.schedule(new SyncTask(srcFactory, dstFactory), 0, INTERVAL);
+        timer.schedule(new SyncTask(srcFactory, dstFactory, srcPrefix, dstPrefix), 0, INTERVAL);
     }
 
 }
