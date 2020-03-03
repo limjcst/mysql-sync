@@ -1,12 +1,14 @@
 package com.example.app;
 
 import com.example.app.models.PlatformIndex;
+import com.example.app.models.Chain;
 import com.example.app.models.ServiceChain;
 import com.example.app.models.DSChain;
 import com.example.app.models.BusinessIndex;
 
 import com.example.app.sync.Syncer;
 import com.example.app.sync.PlatformIndexSyncer;
+import com.example.app.sync.ChainSyncer;
 import com.example.app.sync.ServiceChainSyncer;
 import com.example.app.sync.DSChainSyncer;
 import com.example.app.sync.BusinessIndexSyncer;
@@ -51,6 +53,11 @@ public class SyncTask extends TimerTask {
         LOGGER.info("Start to sync");
         Syncer syncer = new PlatformIndexSyncer(srcFactory, dstFactory);
         for (String name : PlatformIndex.TABLE_NAMES) {
+            syncer.sync(name);
+        }
+
+        syncer = new ChainSyncer(srcFactory, dstFactory);
+        for (String name : Chain.TABLE_NAMES) {
             syncer.sync(name);
         }
 

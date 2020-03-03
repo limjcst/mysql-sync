@@ -3,6 +3,8 @@ package com.example.app;
 import com.example.app.models.Mapper;
 import com.example.app.models.PlatformIndex;
 import com.example.app.models.PlatformIndexMapper;
+import com.example.app.models.Chain;
+import com.example.app.models.ChainMapper;
 import com.example.app.models.ServiceChain;
 import com.example.app.models.ServiceChainMapper;
 import com.example.app.models.DSChain;
@@ -56,6 +58,7 @@ public final class Syncer {
         }
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader);
         factory.getConfiguration().addMapper(PlatformIndexMapper.class);
+        factory.getConfiguration().addMapper(ChainMapper.class);
         factory.getConfiguration().addMapper(ServiceChainMapper.class);
         factory.getConfiguration().addMapper(DSChainMapper.class);
         factory.getConfiguration().addMapper(BusinessIndexMapper.class);
@@ -68,6 +71,11 @@ public final class Syncer {
             PlatformIndexMapper platformIndexMapper = session.getMapper(PlatformIndexMapper.class);
             for (String name : PlatformIndex.TABLE_NAMES) {
                 platformIndexMapper.schema(name);
+            }
+
+            ChainMapper chainMapper = session.getMapper(ChainMapper.class);
+            for (String name : Chain.TABLE_NAMES) {
+                chainMapper.schema(name);
             }
 
             ServiceChainMapper serviceChainMapper = session.getMapper(ServiceChainMapper.class);
@@ -92,6 +100,11 @@ public final class Syncer {
         try (SqlSession session = factory.openSession()) {
             Mapper mapper = session.getMapper(PlatformIndexMapper.class);
             for (String name : PlatformIndex.TABLE_NAMES) {
+                LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
+            }
+
+            mapper = session.getMapper(ChainMapper.class);
+            for (String name : Chain.TABLE_NAMES) {
                 LOGGER.info("There are " + mapper.getCount(name) + " rows in table " + name);
             }
 

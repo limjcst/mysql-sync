@@ -3,6 +3,13 @@ package com.example.app.models;
 public class Chain extends Model {
 
     /**
+     * Names of the tables who use this model.
+     */
+    public static final String[] TABLE_NAMES = {
+        "trace_fly_remote",
+    };
+
+    /**
      * Key.
      */
     private long no = -1;

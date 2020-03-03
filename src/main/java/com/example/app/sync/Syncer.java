@@ -40,7 +40,7 @@ public abstract class Syncer<E extends Model, M extends Mapper> {
 
     /**
      * Synchronize.
-     * @param name Name of the table with structure of ServiceChain
+     * @param name Name of the table
      * @return Number of items sychronized
      */
     public final long sync(final String name) {

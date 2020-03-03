@@ -7,6 +7,7 @@ public final class DSChain extends Chain {
      */
     public static final String[] TABLE_NAMES = {
         "trace_jdbc",
+        "trace_local",
     };
 
     /**

@@ -8,6 +8,7 @@ public final class ServiceChain extends Chain {
     public static final String[] TABLE_NAMES = {
         "trace_csf",
         "trace_osb",
+        "trace_remote_process",
     };
 
     /**
