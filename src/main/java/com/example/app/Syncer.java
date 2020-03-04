@@ -15,8 +15,10 @@ import com.example.app.models.BusinessIndexMapper;
 import io.prometheus.client.hotspot.DefaultExports;
 import io.prometheus.client.exporter.HTTPServer;
 
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Properties;
 import java.util.Timer;
 
 import org.apache.ibatis.io.Resources;
@@ -30,14 +32,26 @@ import org.apache.logging.log4j.LogManager;
 public final class Syncer {
 
     /**
+     * Logger.
+     */
+    private static final Logger LOGGER = LogManager.getLogger(Syncer.class);
+    /**
+     * Default frequency for synchronization in milliseconds.
+     */
+    private static final int DEFAULT_INTERVAL = 1000;
+    /**
+     * Default port to listen on.
+     */
+    private static final int DEFAULT_PORT = 8080;
+
+    /**
      * Frequency for synchronization in milliseconds.
      */
-    private static final int INTERVAL = 1000;
+    private static int interval;
     /**
      * Port to listen on.
      */
-    private static final int PORT = 8080;
-
+    private static int port;
     /**
      * Table name prefix for source database.
      */
@@ -48,10 +62,9 @@ public final class Syncer {
     private static String dstPrefix = "";
 
     /**
-     * Logger.
+     * Configuration for general properties.
      */
-    private static final Logger LOGGER = LogManager.getLogger(Syncer.class);
-
+    private static String configResource = "/config.properties";
     /**
      * Configuration for source database.
      */
@@ -64,14 +77,42 @@ public final class Syncer {
     private Syncer() {
     }
 
-    private static SqlSessionFactory prepareSqlSessionFactory(final String resource) {
-        Reader reader;
-        try {
-            reader = Resources.getResourceAsReader(resource);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+    private static int parseInt(final Object property, final int value) {
+        if (property == null) {
+            return value;
         }
+        try {
+            return Integer.parseInt((String) property);
+        } catch (java.lang.NumberFormatException e) {
+            LOGGER.warn("Bad format of \"" + property + "\", int is expected");
+            return value;
+        }
+    }
+
+    private static String parseString(final Object property, final String value) {
+        if (property == null) {
+            return value;
+        }
+        return (String) property;
+    }
+
+    private static void initialize() throws IOException {
+        DefaultExports.initialize();
+
+        Properties properties = new Properties();
+        InputStream inputStream = Syncer.class.getResourceAsStream(configResource);
+        properties.load(inputStream);
+
+        interval = parseInt(properties.get("interval"), DEFAULT_INTERVAL);
+        port = parseInt(properties.get("port"), DEFAULT_PORT);
+        srcPrefix = parseString(properties.get("src.prefix"), srcPrefix);
+        dstPrefix = parseString(properties.get("dst.prefix"), dstPrefix);
+        LOGGER.info("Properties:\ninterval=" + interval + "\nport=" + port
+                    + "\nsrc.prefix=" + srcPrefix + "\ndst.prefix=" + dstPrefix);
+    }
+
+    private static SqlSessionFactory prepareSqlSessionFactory(final String resource) throws IOException {
+        Reader reader = Resources.getResourceAsReader(resource);
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader);
         factory.getConfiguration().addMapper(PlatformIndexMapper.class);
         factory.getConfiguration().addMapper(ChainMapper.class);
@@ -149,9 +190,9 @@ public final class Syncer {
      * Entrance.
      * @param args Command line arguments
      */
-    public static void main(final String[] args) throws java.io.IOException {
-        DefaultExports.initialize();
-        HTTPServer server = new HTTPServer(PORT, true);
+    public static void main(final String[] args) throws IOException {
+        initialize();
+        HTTPServer server = new HTTPServer(port, true);
 
         LOGGER.info("Preparing target database schema");
         SqlSessionFactory dstFactory = prepareSqlSessionFactory(dstResource);
@@ -164,7 +205,7 @@ public final class Syncer {
         LOGGER.info("Ready for sync");
 
         Timer timer = new Timer();
-        timer.schedule(new SyncTask(srcFactory, dstFactory, srcPrefix, dstPrefix), 0, INTERVAL);
+        timer.schedule(new SyncTask(srcFactory, dstFactory, srcPrefix, dstPrefix), 0, interval);
     }
 
 }
