@@ -12,7 +12,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-public abstract class Syncer<E extends Model, M extends Mapper> {
+public abstract class Syncer<E extends Model, M extends Mapper<E>> {
 
     /**
      * Logger.
