@@ -3,7 +3,7 @@
   <groupId>com.example.app</groupId>
   <artifactId>mysql-syncer</artifactId>
   <packaging>jar</packaging>
-  <version>0.2.3</version>
+  <version>0.2.4</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,6 +24,18 @@
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <version>2.13.0</version>
+    </dependency>
+    <!-- Hotspot JVM metrics-->
+    <dependency>
+      <groupId>io.prometheus</groupId>
+      <artifactId>simpleclient_hotspot</artifactId>
+      <version>0.8.1</version>
+    </dependency>
+    <!-- Exposition HTTPServer-->
+    <dependency>
+      <groupId>io.prometheus</groupId>
+      <artifactId>simpleclient_httpserver</artifactId>
+      <version>0.8.1</version>
     </dependency>
   </dependencies>
 

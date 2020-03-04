@@ -12,6 +12,9 @@ import com.example.app.models.DSChainMapper;
 import com.example.app.models.BusinessIndex;
 import com.example.app.models.BusinessIndexMapper;
 
+import io.prometheus.client.hotspot.DefaultExports;
+import io.prometheus.client.exporter.HTTPServer;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Timer;
@@ -30,6 +33,11 @@ public final class Syncer {
      * Frequency for synchronization in milliseconds.
      */
     private static final int INTERVAL = 1000;
+    /**
+     * Port to listen on.
+     */
+    private static final int PORT = 8080;
+
     /**
      * Table name prefix for source database.
      */
@@ -141,7 +149,10 @@ public final class Syncer {
      * Entrance.
      * @param args Command line arguments
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws java.io.IOException {
+        DefaultExports.initialize();
+        HTTPServer server = new HTTPServer(PORT, true);
+
         LOGGER.info("Preparing target database schema");
         SqlSessionFactory dstFactory = prepareSqlSessionFactory(dstResource);
         createSchema(dstFactory, dstPrefix);
