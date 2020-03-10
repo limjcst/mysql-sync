@@ -19,7 +19,7 @@ public interface BusinessIndexMapper extends Mapper<BusinessIndex> {
     @Update({
         "CREATE TABLE IF NOT EXISTS ${tablename} (",
         "   `No` BIGINT UNSIGNED AUTO_INCREMENT,",
-        "   `serviceName` VARCHAR(15),",
+        "   `serviceName` VARCHAR(20),",
         "   `startTime` BIGINT UNSIGNED,",
         "   `avg_time` DOUBLE UNSIGNED,",
         "   `num` INT UNSIGNED,",

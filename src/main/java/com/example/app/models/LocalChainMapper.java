@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.type.JdbcType;
 
-public interface ServiceChainMapper extends Mapper<ServiceChain> {
+public interface LocalChainMapper extends Mapper<LocalChain> {
 
     /**
      * Create schema.
@@ -26,6 +26,7 @@ public interface ServiceChainMapper extends Mapper<ServiceChain> {
         "   `id` VARCHAR(63),",
         "   `pid` VARCHAR(63),",
         "   `serviceName` VARCHAR(20),",
+        "   `dsName` VARCHAR(20),",
         "   INDEX (startTime),",
         "   PRIMARY KEY (`No`))",
     })
@@ -50,21 +51,22 @@ public interface ServiceChainMapper extends Mapper<ServiceChain> {
         @Result(column = "id", property = "id", jdbcType = JdbcType.VARCHAR),
         @Result(column = "pid", property = "pid", jdbcType = JdbcType.VARCHAR),
         @Result(column = "serviceName", property = "serviceName", jdbcType = JdbcType.VARCHAR),
+        @Result(column = "dsName", property = "dsName", jdbcType = JdbcType.VARCHAR),
     })
-    List<ServiceChain> getByRange(@Param("start") long start, @Param("end") long end,
-                                  @Param("tablename") String tableName);
+    List<LocalChain> getByRange(@Param("start") long start, @Param("end") long end,
+                             @Param("tablename") String tableName);
 
     /**
-     * Insert a ServiceChain.
-     * @param chain The ServiceChain to be inserted
+     * Insert a DSChain.
+     * @param chain The DSChain to be inserted
      * @param tableName The table to be operated on
      * @return id
      */
     @Insert({
-        "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, pid, serviceName)",
+        "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, pid, serviceName, dsName)",
         "VALUES (#{model.no}, #{model.startTime}, #{model.elapsedTime}, #{model.success},",
-        "   #{model.traceId}, #{model.id}, #{model.pid}, #{model.serviceName})",
+        "   #{model.traceId}, #{model.id}, #{model.pid}, #{model.serviceName}, #{model.dsName})",
     })
-    long insert(@Param("model") ServiceChain chain, @Param("tablename") String tableName);
+    long insert(@Param("model") LocalChain chain, @Param("tablename") String tableName);
 
 }

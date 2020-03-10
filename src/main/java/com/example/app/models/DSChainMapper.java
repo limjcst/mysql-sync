@@ -25,7 +25,7 @@ public interface DSChainMapper extends Mapper<DSChain> {
         "   `traceId` VARCHAR(63),",
         "   `id` VARCHAR(63),",
         "   `pid` VARCHAR(63),",
-        "   `dsName` VARCHAR(15),",
+        "   `dsName` VARCHAR(20),",
         "   INDEX (startTime),",
         "   PRIMARY KEY (`No`))",
     })

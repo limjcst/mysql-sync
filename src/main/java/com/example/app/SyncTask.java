@@ -1,16 +1,16 @@
 package com.example.app;
 
 import com.example.app.models.PlatformIndex;
-import com.example.app.models.Chain;
 import com.example.app.models.ServiceChain;
 import com.example.app.models.DSChain;
+import com.example.app.models.LocalChain;
 import com.example.app.models.BusinessIndex;
 
 import com.example.app.sync.Syncer;
 import com.example.app.sync.PlatformIndexSyncer;
-import com.example.app.sync.ChainSyncer;
 import com.example.app.sync.ServiceChainSyncer;
 import com.example.app.sync.DSChainSyncer;
+import com.example.app.sync.LocalChainSyncer;
 import com.example.app.sync.BusinessIndexSyncer;
 
 import java.util.TimerTask;
@@ -81,8 +81,8 @@ public class SyncTask extends TimerTask {
             syncer.sync(srcPrefix + name, dstPrefix + name);
         }
 
-        syncer = new ChainSyncer(srcFactory, dstFactory);
-        for (String name : Chain.TABLE_NAMES) {
+        syncer = new LocalChainSyncer(srcFactory, dstFactory);
+        for (String name : LocalChain.TABLE_NAMES) {
             syncer.sync(srcPrefix + name, dstPrefix + name);
         }
 

@@ -3,12 +3,12 @@ package com.example.app;
 import com.example.app.models.Mapper;
 import com.example.app.models.PlatformIndex;
 import com.example.app.models.PlatformIndexMapper;
-import com.example.app.models.Chain;
-import com.example.app.models.ChainMapper;
 import com.example.app.models.ServiceChain;
 import com.example.app.models.ServiceChainMapper;
 import com.example.app.models.DSChain;
 import com.example.app.models.DSChainMapper;
+import com.example.app.models.LocalChain;
+import com.example.app.models.LocalChainMapper;
 import com.example.app.models.BusinessIndex;
 import com.example.app.models.BusinessIndexMapper;
 
@@ -115,7 +115,7 @@ public final class Syncer {
         Reader reader = Resources.getResourceAsReader(resource);
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader);
         factory.getConfiguration().addMapper(PlatformIndexMapper.class);
-        factory.getConfiguration().addMapper(ChainMapper.class);
+        factory.getConfiguration().addMapper(LocalChainMapper.class);
         factory.getConfiguration().addMapper(ServiceChainMapper.class);
         factory.getConfiguration().addMapper(DSChainMapper.class);
         factory.getConfiguration().addMapper(BusinessIndexMapper.class);
@@ -130,9 +130,9 @@ public final class Syncer {
                 platformIndexMapper.schema(prefix + name);
             }
 
-            ChainMapper chainMapper = session.getMapper(ChainMapper.class);
-            for (String name : Chain.TABLE_NAMES) {
-                chainMapper.schema(prefix + name);
+            LocalChainMapper localChainMapper = session.getMapper(LocalChainMapper.class);
+            for (String name : LocalChain.TABLE_NAMES) {
+                localChainMapper.schema(prefix + name);
             }
 
             ServiceChainMapper serviceChainMapper = session.getMapper(ServiceChainMapper.class);
@@ -160,8 +160,8 @@ public final class Syncer {
                 LOGGER.info("There are " + mapper.getCount(tableName) + " rows in table " + tableName);
             }
 
-            mapper = session.getMapper(ChainMapper.class);
-            for (String name : Chain.TABLE_NAMES) {
+            mapper = session.getMapper(LocalChainMapper.class);
+            for (String name : LocalChain.TABLE_NAMES) {
                 String tableName = prefix + name;
                 LOGGER.info("There are " + mapper.getCount(tableName) + " rows in table " + tableName);
             }

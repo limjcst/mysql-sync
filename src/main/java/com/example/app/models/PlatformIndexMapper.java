@@ -23,7 +23,7 @@ public interface PlatformIndexMapper extends Mapper<PlatformIndex> {
         "   `name` VARCHAR(63),",
         "   `timestamp` BIGINT UNSIGNED,",
         "   `value` VARCHAR(1024),",
-        "   `cmdb_id` VARCHAR(15),",
+        "   `cmdb_id` VARCHAR(20),",
         "   INDEX (timestamp),",
         "   PRIMARY KEY (`No`))",
     })

@@ -1,21 +1,22 @@
 package com.example.app.models;
 
-public final class ServiceChain extends Chain {
+public final class LocalChain extends Chain {
 
     /**
      * Names of the tables who use this model.
      */
     public static final String[] TABLE_NAMES = {
-        "trace_csf",
-        "trace_osb",
-        "trace_remote_process",
-        "trace_fly_remote",
+        "trace_local",
     };
 
     /**
      * Name of service.
      */
     private String serviceName;
+    /**
+     * Name of ds.
+     */
+    private String dsName;
 
     public String getServiceName() {
         return serviceName;
@@ -23,6 +24,14 @@ public final class ServiceChain extends Chain {
 
     public void setServiceName(final String serviceName) {
         this.serviceName = serviceName;
+    }
+
+    public String getDsName() {
+        return dsName;
+    }
+
+    public void setDsName(final String dsName) {
+        this.dsName = dsName;
     }
 
 }
