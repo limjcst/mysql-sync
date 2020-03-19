@@ -20,6 +20,11 @@ public abstract class Syncer<E extends Model, M extends Mapper<E>> {
     protected static final Logger LOGGER = LogManager.getLogger(Syncer.class);
 
     /**
+     * Maximum number to call syncBatch.
+     */
+    private static final int MAX_BATCH_NUM = 65536;
+
+    /**
      * Session factory for source database.
      */
     private SqlSessionFactory srcFactory = null;
@@ -47,7 +52,7 @@ public abstract class Syncer<E extends Model, M extends Mapper<E>> {
     public final long sync(final String srcName, final String dstName) {
         long count = 0;
         long batchSize = getBatchSize();
-        for (;;) {
+        for (int i = 0; i < MAX_BATCH_NUM; ++i) {
             long update = syncBatch(srcName, dstName, batchSize);
             count += update;
             if (update < batchSize) {

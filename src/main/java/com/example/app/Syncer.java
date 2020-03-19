@@ -192,7 +192,7 @@ public final class Syncer {
      */
     public static void main(final String[] args) throws IOException {
         initialize();
-        HTTPServer server = new HTTPServer(port, true);
+        HTTPServer server = new HTTPServer(port, true);  // daemon thread
 
         LOGGER.info("Preparing target database schema");
         SqlSessionFactory dstFactory = prepareSqlSessionFactory(dstResource);
@@ -204,7 +204,7 @@ public final class Syncer {
 
         LOGGER.info("Ready for sync");
 
-        Timer timer = new Timer();
+        Timer timer = new Timer(false);  // not a daemon
         timer.schedule(new SyncTask(srcFactory, dstFactory, srcPrefix, dstPrefix), 0, interval);
     }
 
