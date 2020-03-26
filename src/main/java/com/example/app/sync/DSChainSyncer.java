@@ -10,7 +10,7 @@ public class DSChainSyncer extends Syncer<DSChain, DSChainMapper> {
 
     /**
      * Batch size for bulk sql operation.
-     * 1MB / (8 + 8 + 8 + 7 + 63 + 63 + 63 + 20)B = 4369
+     * 1MB / (8 + 8 + 8 + 7 + 63 + 63 + 63 + 20 + 20)B = 4033
      */
     public static final int BATCH_SIZE = 1024;
 

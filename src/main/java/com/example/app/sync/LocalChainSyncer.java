@@ -10,7 +10,7 @@ public class LocalChainSyncer extends Syncer<LocalChain, LocalChainMapper> {
 
     /**
      * Batch size for bulk sql operation.
-     * 1MB / (8 + 8 + 8 + 7 + 63 + 63 + 63 + 20 + 20)B = 4033
+     * 1MB / (8 + 8 + 8 + 7 + 63 + 63 + 63 + 20 + 20 + 20)B = 3745
      */
     public static final int BATCH_SIZE = 1024;
 

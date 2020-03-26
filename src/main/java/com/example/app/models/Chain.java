@@ -36,6 +36,10 @@ public class Chain extends Model {
      * pid.
      */
     private String pid;
+    /**
+     * id for cmdb.
+     */
+    private String cmdbId;
 
     public final long getNo() {
         return no;
@@ -91,6 +95,14 @@ public class Chain extends Model {
 
     public final void setPid(final String pid) {
         this.pid = pid;
+    }
+
+    public final String getCmdbId() {
+        return cmdbId;
+    }
+
+    public final void setCmdbId(final String cmdbId) {
+        this.cmdbId = cmdbId;
     }
 
 }

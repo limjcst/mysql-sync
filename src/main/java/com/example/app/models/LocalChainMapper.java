@@ -25,6 +25,7 @@ public interface LocalChainMapper extends Mapper<LocalChain> {
         "   `traceId` VARCHAR(63),",
         "   `id` VARCHAR(63),",
         "   `pid` VARCHAR(63),",
+        "   `cmdb_id` VARCHAR(20),",
         "   `serviceName` VARCHAR(20),",
         "   `dsName` VARCHAR(20),",
         "   INDEX (startTime),",
@@ -50,6 +51,7 @@ public interface LocalChainMapper extends Mapper<LocalChain> {
         @Result(column = "traceId", property = "traceId", jdbcType = JdbcType.VARCHAR),
         @Result(column = "id", property = "id", jdbcType = JdbcType.VARCHAR),
         @Result(column = "pid", property = "pid", jdbcType = JdbcType.VARCHAR),
+        @Result(column = "cmdb_id", property = "cmdbId", jdbcType = JdbcType.VARCHAR),
         @Result(column = "serviceName", property = "serviceName", jdbcType = JdbcType.VARCHAR),
         @Result(column = "dsName", property = "dsName", jdbcType = JdbcType.VARCHAR),
     })
@@ -63,9 +65,10 @@ public interface LocalChainMapper extends Mapper<LocalChain> {
      * @return id
      */
     @Insert({
-        "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, pid, serviceName, dsName)",
+        "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, pid, cmdb_id,",
+        "   serviceName, dsName)",
         "VALUES (#{model.no}, #{model.startTime}, #{model.elapsedTime}, #{model.success},",
-        "   #{model.traceId}, #{model.id}, #{model.pid}, #{model.serviceName}, #{model.dsName})",
+        "   #{model.traceId}, #{model.id}, #{model.pid}, #{model.cmdbId}, #{model.serviceName}, #{model.dsName})",
     })
     long insert(@Param("model") LocalChain chain, @Param("tablename") String tableName);
 

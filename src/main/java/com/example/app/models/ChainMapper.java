@@ -25,6 +25,7 @@ public interface ChainMapper extends Mapper<Chain> {
         "   `traceId` VARCHAR(63),",
         "   `id` VARCHAR(63),",
         "   `pid` VARCHAR(63),",
+        "   `cmdb_id` VARCHAR(20),",
         "   INDEX (startTime),",
         "   PRIMARY KEY (`No`))",
     })
@@ -48,6 +49,7 @@ public interface ChainMapper extends Mapper<Chain> {
         @Result(column = "traceId", property = "traceId", jdbcType = JdbcType.VARCHAR),
         @Result(column = "id", property = "id", jdbcType = JdbcType.VARCHAR),
         @Result(column = "pid", property = "pid", jdbcType = JdbcType.VARCHAR),
+        @Result(column = "cmdb_id", property = "cmdbId", jdbcType = JdbcType.VARCHAR),
     })
     List<Chain> getByRange(@Param("start") long start, @Param("end") long end,
                            @Param("tablename") String tableName);
@@ -59,9 +61,9 @@ public interface ChainMapper extends Mapper<Chain> {
      * @return id
      */
     @Insert({
-        "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, pid)",
+        "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, pid, cmdb_id)",
         "VALUES (#{model.no}, #{model.startTime}, #{model.elapsedTime}, #{model.success},",
-        "   #{model.traceId}, #{model.id}, #{model.pid})",
+        "   #{model.traceId}, #{model.id}, #{model.pid}), #{model.cmdbId}",
     })
     long insert(@Param("model") Chain chain, @Param("tablename") String tableName);
 
