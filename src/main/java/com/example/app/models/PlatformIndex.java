@@ -39,6 +39,43 @@ public final class PlatformIndex extends Model {
      */
     private String cmdbId;
 
+    /**
+     * Compare with another object.
+     * @param obj Another object.
+     * @return Whether they are equal.
+     */
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        return equals((PlatformIndex) obj);
+    }
+
+    /**
+     * hashCode.
+     * @return id.
+     */
+    public int hashCode() {
+        return (int) id;
+    }
+
+    /**
+     * Compare with another model.
+     * @param obj Another model.
+     * @return Whether they are equal.
+     */
+    public boolean equals(final PlatformIndex obj) {
+        return id == obj.getId() && itemId == obj.getItemId() && name.equals(obj.getName())
+            && timestamp == obj.getTimestamp() && value.equals(obj.getValue())
+            && cmdbId.equals(obj.getCmdbId());
+    }
+
     public long getId() {
         return id;
     }

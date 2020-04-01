@@ -7,6 +7,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jacoco.output.dir>${project.basedir}/target</jacoco.output.dir>
   </properties>
 
   <dependencies>
@@ -36,6 +37,12 @@
       <groupId>io.prometheus</groupId>
       <artifactId>simpleclient_httpserver</artifactId>
       <version>0.8.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.6.1</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -74,6 +81,37 @@
             <arg>-Xlint:all</arg>
           </compilerArgs>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M4</version>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.5</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <destFile>${jacoco.output.dir}/jacoco.exec</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${jacoco.output.dir}/jacoco.exec</dataFile>
+              <outputDirectory>${jacoco.output.dir}/coverage</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
