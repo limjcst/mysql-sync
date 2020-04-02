@@ -21,6 +21,7 @@ public interface PlatformIndexMapper extends Mapper<PlatformIndex> {
         "   `No` BIGINT UNSIGNED AUTO_INCREMENT,",
         "   `itemid` BIGINT UNSIGNED,",
         "   `name` VARCHAR(63),",
+        "   `bomc_id` VARCHAR(16),",
         "   `timestamp` BIGINT UNSIGNED,",
         "   `value` VARCHAR(1024),",
         "   `cmdb_id` VARCHAR(20),",
@@ -43,6 +44,7 @@ public interface PlatformIndexMapper extends Mapper<PlatformIndex> {
         @Result(column = "No", property = "no", jdbcType = JdbcType.BIGINT, id = true),
         @Result(column = "itemid", property = "itemId", jdbcType = JdbcType.BIGINT),
         @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR),
+        @Result(column = "bomc_id", property = "bomcId", jdbcType = JdbcType.VARCHAR),
         @Result(column = "timestamp", property = "timestamp", jdbcType = JdbcType.BIGINT),
         @Result(column = "value", property = "value", jdbcType = JdbcType.VARCHAR),
         @Result(column = "cmdb_id", property = "cmdbId", jdbcType = JdbcType.VARCHAR),
@@ -57,8 +59,8 @@ public interface PlatformIndexMapper extends Mapper<PlatformIndex> {
      * @return id
      */
     @Insert({
-        "INSERT INTO ${tablename} (No, itemid, name, timestamp, value, cmdb_id)",
-        "VALUES (#{model.no}, #{model.itemId}, #{model.name}, #{model.timestamp},",
+        "INSERT INTO ${tablename} (No, itemid, name, bomc_id, timestamp, value, cmdb_id)",
+        "VALUES (#{model.no}, #{model.itemId}, #{model.name}, #{model.bomcId}, #{model.timestamp},",
         "   #{model.value}, #{model.cmdbId})",
     })
     long insert(@Param("model") PlatformIndex index, @Param("tablename") String tableName);

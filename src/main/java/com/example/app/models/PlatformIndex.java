@@ -23,6 +23,10 @@ public final class PlatformIndex extends Model {
      */
     private String name;
     /**
+     * id for bomc.
+     */
+    private String bomcId;
+    /**
      * timestamp.
      */
     private long timestamp;
@@ -69,7 +73,8 @@ public final class PlatformIndex extends Model {
     public boolean equals(final PlatformIndex obj) {
         return ((Model) this).equals((Model) obj) && itemId == obj.getItemId()
             && timestamp == obj.getTimestamp() && stringEquals(name, obj.getName())
-            && stringEquals(value, obj.getValue()) && stringEquals(cmdbId, obj.getCmdbId());
+            && stringEquals(bomcId, obj.getBomcId()) && stringEquals(cmdbId, obj.getCmdbId())
+            && stringEquals(value, obj.getValue());
     }
 
     public long getItemId() {
@@ -86,6 +91,14 @@ public final class PlatformIndex extends Model {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public String getBomcId() {
+        return bomcId;
+    }
+
+    public void setBomcId(final String bomcId) {
+        this.bomcId = bomcId;
     }
 
     public long getTimestamp() {

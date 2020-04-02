@@ -12,6 +12,7 @@ public class PlatformIndexTest extends SyncTest<PlatformIndex, PlatformIndexMapp
         model.setNo(no);
         model.setItemId(1000);
         model.setName("name");
+        model.setCmdbId("bomc");
         model.setTimestamp(100);
         model.setValue("value");
         model.setCmdbId("cmdb");
