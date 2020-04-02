@@ -41,6 +41,44 @@ public class Chain extends Model {
      */
     private String cmdbId;
 
+    /**
+     * Compare with another object.
+     * @param obj Another object.
+     * @return Whether they are equal.
+     */
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        return equals(this.getClass().cast(obj));
+    }
+
+    /**
+     * hashCode.
+     * @return id.
+     */
+    public int hashCode() {
+        return (int) no;
+    }
+
+    /**
+     * Compare with another model.
+     * @param obj Another model.
+     * @return Whether they are equal.
+     */
+    public boolean equals(final Chain obj) {
+        return no == obj.getNo() && startTime == obj.getStartTime()
+            && elapsedTime == obj.getElapsedTime() && stringEquals(success, obj.getSuccess())
+            && stringEquals(traceId, obj.getTraceId()) && stringEquals(id, obj.getId())
+            && stringEquals(pid, obj.getPid()) && stringEquals(cmdbId, obj.getCmdbId());
+    }
+
     public final long getNo() {
         return no;
     }

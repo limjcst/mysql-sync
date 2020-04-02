@@ -54,7 +54,7 @@ public final class PlatformIndex extends Model {
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        return equals((PlatformIndex) obj);
+        return equals(this.getClass().cast(obj));
     }
 
     /**
@@ -71,9 +71,9 @@ public final class PlatformIndex extends Model {
      * @return Whether they are equal.
      */
     public boolean equals(final PlatformIndex obj) {
-        return id == obj.getId() && itemId == obj.getItemId() && name.equals(obj.getName())
-            && timestamp == obj.getTimestamp() && value.equals(obj.getValue())
-            && cmdbId.equals(obj.getCmdbId());
+        return id == obj.getId() && itemId == obj.getItemId() && stringEquals(name, obj.getName())
+            && timestamp == obj.getTimestamp() && stringEquals(value, obj.getValue())
+            && stringEquals(cmdbId, obj.getCmdbId());
     }
 
     public long getId() {

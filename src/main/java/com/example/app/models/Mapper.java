@@ -8,6 +8,12 @@ import org.apache.ibatis.annotations.Select;
 public interface Mapper<M extends Model> {
 
     /**
+     * Create schema.
+     * @param tableName The table to be operated on
+     */
+    void schema(String tableName);
+
+    /**
      * Count models.
      * @param tableName The table to be operated on
      * @return number of models
