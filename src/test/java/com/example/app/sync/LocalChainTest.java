@@ -10,6 +10,7 @@ public class LocalChainTest extends SyncTest<LocalChain, LocalChainMapper> {
     protected LocalChain createModel(final long no) {
         LocalChain model = new LocalChain();
         model.setNo(no);
+        model.setMsgTime(102);
         model.setStartTime(100);
         model.setElapsedTime(3);
         model.setSuccess("True");

@@ -19,6 +19,7 @@ public interface DSChainMapper extends Mapper<DSChain> {
     @Update({
         "CREATE TABLE IF NOT EXISTS ${tablename} (",
         "   `No` BIGINT UNSIGNED AUTO_INCREMENT,",
+        "   `msgTime` BIGINT UNSIGNED,",
         "   `startTime` BIGINT UNSIGNED,",
         "   `elapsedTime` DOUBLE UNSIGNED,",
         "   `success` VARCHAR(7),",
@@ -44,6 +45,7 @@ public interface DSChainMapper extends Mapper<DSChain> {
     })
     @Results({
         @Result(column = "No", property = "no", jdbcType = JdbcType.BIGINT, id = true),
+        @Result(column = "msgTime", property = "msgTime", jdbcType = JdbcType.BIGINT),
         @Result(column = "startTime", property = "startTime", jdbcType = JdbcType.BIGINT),
         @Result(column = "elapsedTime", property = "elapsedTime", jdbcType = JdbcType.DOUBLE),
         @Result(column = "success", property = "success", jdbcType = JdbcType.VARCHAR),
@@ -63,9 +65,11 @@ public interface DSChainMapper extends Mapper<DSChain> {
      * @return id
      */
     @Insert({
-        "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, pid, cmdb_id, dsName)",
-        "VALUES (#{model.no}, #{model.startTime}, #{model.elapsedTime}, #{model.success},",
-        "   #{model.traceId}, #{model.id}, #{model.pid}, #{model.cmdbId}, #{model.dsName})",
+        "INSERT INTO ${tablename} (No, msgTime, startTime, elapsedTime, success, traceId,",
+        "   id, pid, cmdb_id, dsName)",
+        "VALUES (#{model.no}, #{model.msgTime}, #{model.startTime}, #{model.elapsedTime},",
+        "   #{model.success}, #{model.traceId}, #{model.id}, #{model.pid}, #{model.cmdbId},",
+        "   #{model.dsName})",
     })
     long insert(@Param("model") DSChain chain, @Param("tablename") String tableName);
 

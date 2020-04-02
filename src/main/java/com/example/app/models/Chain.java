@@ -9,6 +9,10 @@ public class Chain extends Model {
     };
 
     /**
+     * Message time.
+     */
+    private long msgTime;
+    /**
      * Start time.
      */
     private long startTime;
@@ -69,10 +73,19 @@ public class Chain extends Model {
      * @return Whether they are equal.
      */
     public boolean equals(final Chain obj) {
-        return ((Model) this).equals((Model) obj) && startTime == obj.getStartTime()
-            && elapsedTime == obj.getElapsedTime() && stringEquals(success, obj.getSuccess())
-            && stringEquals(traceId, obj.getTraceId()) && stringEquals(id, obj.getId())
-            && stringEquals(pid, obj.getPid()) && stringEquals(cmdbId, obj.getCmdbId());
+        return ((Model) this).equals((Model) obj) && msgTime == obj.getMsgTime()
+            && startTime == obj.getStartTime() && elapsedTime == obj.getElapsedTime()
+            && stringEquals(success, obj.getSuccess()) && stringEquals(traceId, obj.getTraceId())
+            && stringEquals(id, obj.getId()) && stringEquals(pid, obj.getPid())
+            && stringEquals(cmdbId, obj.getCmdbId());
+    }
+
+    public final long getMsgTime() {
+        return msgTime;
+    }
+
+    public final void setMsgTime(final long msgTime) {
+        this.msgTime = msgTime;
     }
 
     public final long getStartTime() {

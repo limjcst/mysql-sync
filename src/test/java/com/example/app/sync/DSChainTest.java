@@ -10,6 +10,7 @@ public class DSChainTest extends SyncTest<DSChain, DSChainMapper> {
     protected DSChain createModel(final long no) {
         DSChain model = new DSChain();
         model.setNo(no);
+        model.setMsgTime(102);
         model.setStartTime(100);
         model.setElapsedTime(3);
         model.setSuccess("True");

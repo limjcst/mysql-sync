@@ -10,6 +10,7 @@ public class ChainTest extends SyncTest<Chain, ChainMapper> {
     protected Chain createModel(final long no) {
         Chain model = new Chain();
         model.setNo(no);
+        model.setMsgTime(102);
         model.setStartTime(100);
         model.setElapsedTime(3);
         model.setSuccess("True");

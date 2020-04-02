@@ -10,6 +10,7 @@ public class ServiceChainTest extends SyncTest<ServiceChain, ServiceChainMapper>
     protected ServiceChain createModel(final long no) {
         ServiceChain model = new ServiceChain();
         model.setNo(no);
+        model.setMsgTime(102);
         model.setStartTime(100);
         model.setElapsedTime(3);
         model.setSuccess("True");
