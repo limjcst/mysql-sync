@@ -41,7 +41,7 @@ public interface BusinessIndexMapper extends Mapper<BusinessIndex> {
         "SELECT * FROM ${tablename} WHERE No >= #{start} and No < #{end} ORDER BY No ASC"
     })
     @Results({
-        @Result(column = "No", property = "id", jdbcType = JdbcType.BIGINT, id = true),
+        @Result(column = "No", property = "no", jdbcType = JdbcType.BIGINT, id = true),
         @Result(column = "serviceName", property = "serviceName", jdbcType = JdbcType.VARCHAR),
         @Result(column = "startTime", property = "startTime", jdbcType = JdbcType.BIGINT),
         @Result(column = "avg_time", property = "avgTime", jdbcType = JdbcType.DOUBLE),
@@ -60,7 +60,7 @@ public interface BusinessIndexMapper extends Mapper<BusinessIndex> {
      */
     @Insert({
         "INSERT INTO ${tablename} (No, serviceName, startTime, avg_time, num, succee_num, succee_rate)",
-        "VALUES (#{model.id}, #{model.serviceName}, #{model.startTime}, #{model.avgTime}, #{model.num},",
+        "VALUES (#{model.no}, #{model.serviceName}, #{model.startTime}, #{model.avgTime}, #{model.num},",
         "   #{model.succeeNum}, #{model.succeeRate})",
     })
     long insert(@Param("model") BusinessIndex index, @Param("tablename") String tableName);

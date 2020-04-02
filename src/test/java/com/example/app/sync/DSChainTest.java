@@ -25,10 +25,6 @@ public class DSChainTest extends SyncTest<DSChain, DSChainMapper> {
         return new DSChainSyncer(factory, factory);
     }
 
-    protected long getId(final DSChain model) {
-        return model.getNo();
-    }
-
     protected Class<DSChainMapper> getMapperClass() {
         return DSChainMapper.class;
     }

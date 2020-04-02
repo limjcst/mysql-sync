@@ -15,10 +15,6 @@ public final class PlatformIndex extends Model {
     };
 
     /**
-     * Key.
-     */
-    private long id = -1;
-    /**
      * id for item.
      */
     private long itemId;
@@ -59,10 +55,10 @@ public final class PlatformIndex extends Model {
 
     /**
      * hashCode.
-     * @return id.
+     * @return no.
      */
     public int hashCode() {
-        return (int) id;
+        return (int) getNo();
     }
 
     /**
@@ -71,17 +67,9 @@ public final class PlatformIndex extends Model {
      * @return Whether they are equal.
      */
     public boolean equals(final PlatformIndex obj) {
-        return id == obj.getId() && itemId == obj.getItemId() && stringEquals(name, obj.getName())
-            && timestamp == obj.getTimestamp() && stringEquals(value, obj.getValue())
-            && stringEquals(cmdbId, obj.getCmdbId());
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(final long id) {
-        this.id = id;
+        return ((Model) this).equals((Model) obj) && itemId == obj.getItemId()
+            && timestamp == obj.getTimestamp() && stringEquals(name, obj.getName())
+            && stringEquals(value, obj.getValue()) && stringEquals(cmdbId, obj.getCmdbId());
     }
 
     public long getItemId() {

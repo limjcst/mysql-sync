@@ -60,7 +60,7 @@ public abstract class SyncTest<E extends Model, M extends Mapper<E>> {
 
             E model = createModel(2);
             mapper.insert(model, TABLE_NAME);
-            long id = getId(model);
+            long id = model.getNo();
 
             assertEquals(1, mapper.getCount(TABLE_NAME));
             assertEquals(id, mapper.getLatestId(TABLE_NAME));
@@ -74,7 +74,7 @@ public abstract class SyncTest<E extends Model, M extends Mapper<E>> {
     @Test
     void testSync() {
         E model = createModel(1);
-        long id = getId(model);
+        long id = model.getNo();
         try (SqlSession session = factory.openSession()) {
             M mapper = getMapper(session);
             assertEquals(0, mapper.getCount(TABLE_NAME));
@@ -100,8 +100,6 @@ public abstract class SyncTest<E extends Model, M extends Mapper<E>> {
     protected abstract E createModel(long no);
 
     protected abstract Syncer createSyncer();
-
-    protected abstract long getId(E model);
 
     protected abstract Class<M> getMapperClass();
 

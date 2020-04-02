@@ -32,15 +32,6 @@ public class LocalChainSyncer extends Syncer<LocalChain, LocalChainMapper> {
     }
 
     /**
-     * Get identifier of model.
-     * @param model model
-     * @return identifier
-     */
-    protected long getId(final LocalChain model) {
-        return model.getNo();
-    }
-
-    /**
      * Get mapper.
      * @param session Sql session
      * @return mapper

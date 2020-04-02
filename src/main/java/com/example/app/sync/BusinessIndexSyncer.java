@@ -32,15 +32,6 @@ public class BusinessIndexSyncer extends Syncer<BusinessIndex, BusinessIndexMapp
     }
 
     /**
-     * Get identifier of model.
-     * @param model model
-     * @return identifier
-     */
-    protected long getId(final BusinessIndex model) {
-        return model.getId();
-    }
-
-    /**
      * Get mapper.
      * @param session Sql session
      * @return mapper

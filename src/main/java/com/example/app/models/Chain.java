@@ -9,10 +9,6 @@ public class Chain extends Model {
     };
 
     /**
-     * Key.
-     */
-    private long no = -1;
-    /**
      * Start time.
      */
     private long startTime;
@@ -61,10 +57,10 @@ public class Chain extends Model {
 
     /**
      * hashCode.
-     * @return id.
+     * @return no.
      */
     public int hashCode() {
-        return (int) no;
+        return (int) getNo();
     }
 
     /**
@@ -73,18 +69,10 @@ public class Chain extends Model {
      * @return Whether they are equal.
      */
     public boolean equals(final Chain obj) {
-        return no == obj.getNo() && startTime == obj.getStartTime()
+        return ((Model) this).equals((Model) obj) && startTime == obj.getStartTime()
             && elapsedTime == obj.getElapsedTime() && stringEquals(success, obj.getSuccess())
             && stringEquals(traceId, obj.getTraceId()) && stringEquals(id, obj.getId())
             && stringEquals(pid, obj.getPid()) && stringEquals(cmdbId, obj.getCmdbId());
-    }
-
-    public final long getNo() {
-        return no;
-    }
-
-    public final void setNo(final long no) {
-        this.no = no;
     }
 
     public final long getStartTime() {

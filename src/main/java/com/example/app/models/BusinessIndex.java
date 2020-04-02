@@ -10,10 +10,6 @@ public final class BusinessIndex extends Model {
     };
 
     /**
-     * Key.
-     */
-    private long id = -1;
-    /**
      * Name of service.
      */
     private String serviceName;
@@ -58,10 +54,10 @@ public final class BusinessIndex extends Model {
 
     /**
      * hashCode.
-     * @return id.
+     * @return no.
      */
     public int hashCode() {
-        return (int) id;
+        return (int) getNo();
     }
 
     /**
@@ -70,18 +66,10 @@ public final class BusinessIndex extends Model {
      * @return Whether they are equal.
      */
     public boolean equals(final BusinessIndex obj) {
-        return id == obj.getId() && stringEquals(serviceName, obj.getServiceName())
+        return ((Model) this).equals((Model) obj) && stringEquals(serviceName, obj.getServiceName())
             && startTime == obj.getStartTime() && avgTime == obj.getAvgTime()
             && num == obj.getNum() && succeeNum == obj.getSucceeNum()
             && succeeRate == obj.getSucceeRate();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(final long id) {
-        this.id = id;
     }
 
     public String getServiceName() {

@@ -40,7 +40,7 @@ public interface PlatformIndexMapper extends Mapper<PlatformIndex> {
         "SELECT * FROM ${tablename} WHERE No >= #{start} and No < #{end} ORDER BY No ASC"
     })
     @Results({
-        @Result(column = "No", property = "id", jdbcType = JdbcType.BIGINT, id = true),
+        @Result(column = "No", property = "no", jdbcType = JdbcType.BIGINT, id = true),
         @Result(column = "itemid", property = "itemId", jdbcType = JdbcType.BIGINT),
         @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR),
         @Result(column = "timestamp", property = "timestamp", jdbcType = JdbcType.BIGINT),
@@ -58,7 +58,7 @@ public interface PlatformIndexMapper extends Mapper<PlatformIndex> {
      */
     @Insert({
         "INSERT INTO ${tablename} (No, itemid, name, timestamp, value, cmdb_id)",
-        "VALUES (#{model.id}, #{model.itemId}, #{model.name}, #{model.timestamp},",
+        "VALUES (#{model.no}, #{model.itemId}, #{model.name}, #{model.timestamp},",
         "   #{model.value}, #{model.cmdbId})",
     })
     long insert(@Param("model") PlatformIndex index, @Param("tablename") String tableName);

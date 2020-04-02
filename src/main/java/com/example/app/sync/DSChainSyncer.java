@@ -32,15 +32,6 @@ public class DSChainSyncer extends Syncer<DSChain, DSChainMapper> {
     }
 
     /**
-     * Get identifier of model.
-     * @param model model
-     * @return identifier
-     */
-    protected long getId(final DSChain model) {
-        return model.getNo();
-    }
-
-    /**
      * Get mapper.
      * @param session Sql session
      * @return mapper

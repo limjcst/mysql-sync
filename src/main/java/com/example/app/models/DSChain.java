@@ -34,7 +34,7 @@ public final class DSChain extends Chain {
 
     /**
      * hashCode.
-     * @return id.
+     * @return no.
      */
     public int hashCode() {
         return (int) getNo();

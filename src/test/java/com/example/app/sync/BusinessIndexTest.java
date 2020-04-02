@@ -9,7 +9,7 @@ public class BusinessIndexTest extends SyncTest<BusinessIndex, BusinessIndexMapp
 
     protected BusinessIndex createModel(final long no) {
         BusinessIndex model = new BusinessIndex();
-        model.setId(no);
+        model.setNo(no);
         model.setServiceName("name");
         model.setStartTime(100);
         model.setAvgTime(3);
@@ -21,10 +21,6 @@ public class BusinessIndexTest extends SyncTest<BusinessIndex, BusinessIndexMapp
 
     protected BusinessIndexSyncer createSyncer() {
         return new BusinessIndexSyncer(factory, factory);
-    }
-
-    protected long getId(final BusinessIndex model) {
-        return model.getId();
     }
 
     protected Class<BusinessIndexMapper> getMapperClass() {

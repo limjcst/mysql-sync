@@ -32,15 +32,6 @@ public class PlatformIndexSyncer extends Syncer<PlatformIndex, PlatformIndexMapp
     }
 
     /**
-     * Get identifier of model.
-     * @param model model
-     * @return identifier
-     */
-    protected long getId(final PlatformIndex model) {
-        return model.getId();
-    }
-
-    /**
      * Get mapper.
      * @param session Sql session
      * @return mapper

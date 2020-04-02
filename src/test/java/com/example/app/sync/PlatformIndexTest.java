@@ -9,7 +9,7 @@ public class PlatformIndexTest extends SyncTest<PlatformIndex, PlatformIndexMapp
 
     protected PlatformIndex createModel(final long no) {
         PlatformIndex model = new PlatformIndex();
-        model.setId(no);
+        model.setNo(no);
         model.setItemId(1000);
         model.setName("name");
         model.setTimestamp(100);
@@ -20,10 +20,6 @@ public class PlatformIndexTest extends SyncTest<PlatformIndex, PlatformIndexMapp
 
     protected PlatformIndexSyncer createSyncer() {
         return new PlatformIndexSyncer(factory, factory);
-    }
-
-    protected long getId(final PlatformIndex model) {
-        return model.getId();
     }
 
     protected Class<PlatformIndexMapper> getMapperClass() {

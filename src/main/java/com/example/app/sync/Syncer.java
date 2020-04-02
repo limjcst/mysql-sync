@@ -77,7 +77,7 @@ public abstract class Syncer<E extends Model, M extends Mapper<E>> {
             List<E> models = srcMapper.getByRange(headId, headId + batchSize, srcName);
             boolean success = true;
             for (E model : models) {
-                if (getId(model) != headId) {
+                if (model.getNo() != headId) {
                     success = false;
                     break;
                 }
@@ -98,8 +98,6 @@ public abstract class Syncer<E extends Model, M extends Mapper<E>> {
      * @return batch size
      */
     public abstract long getBatchSize();
-
-    protected abstract long getId(E model);
 
     protected abstract M getMapper(SqlSession session);
 
