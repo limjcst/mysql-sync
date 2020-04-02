@@ -5,7 +5,49 @@ import com.example.app.models.BusinessIndexMapper;
 
 import org.apache.ibatis.session.SqlSession;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
 public class BusinessIndexTest extends SyncTest<BusinessIndex, BusinessIndexMapper> {
+
+    @Test
+    void testEqual() {
+        BusinessIndex first = createModel(0);
+        assertEquals(true, first.equals(first));
+        assertEquals(false, first.equals(null));
+        assertEquals(false, first.equals(this));
+
+        BusinessIndex second = createModel(0);
+        assertEquals(true, first.equals(second));
+        assertEquals(0, first.hashCode() - second.hashCode());
+        
+        second.setNo(1);
+        assertEquals(false, first.equals(second));
+
+        second = createModel(0);
+        second.setServiceName("another name");
+        assertEquals(false, first.equals(second));
+
+        second = createModel(0);
+        second.setStartTime(101);
+        assertEquals(false, first.equals(second));
+
+        second = createModel(0);
+        second.setAvgTime(101);
+        assertEquals(false, first.equals(second));
+
+        second = createModel(0);
+        second.setNum(301);
+        assertEquals(false, first.equals(second));
+    
+        second = createModel(0);
+        second.setSucceeNum(200);
+        assertEquals(false, first.equals(second));
+    
+        second = createModel(0);
+        second.setSucceeRate(0.6);
+        assertEquals(false, first.equals(second));
+    }
 
     protected BusinessIndex createModel(final long no) {
         BusinessIndex model = new BusinessIndex();

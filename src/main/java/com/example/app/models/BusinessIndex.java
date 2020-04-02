@@ -49,7 +49,11 @@ public final class BusinessIndex extends Model {
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        return equals(this.getClass().cast(obj));
+        BusinessIndex model = (BusinessIndex) obj;
+        return getNo() == model.getNo() && stringEquals(serviceName, model.getServiceName())
+            && startTime == model.getStartTime() && avgTime == model.getAvgTime()
+            && num == model.getNum() && succeeNum == model.getSucceeNum()
+            && succeeRate == model.getSucceeRate();
     }
 
     /**
@@ -58,18 +62,6 @@ public final class BusinessIndex extends Model {
      */
     public int hashCode() {
         return (int) getNo();
-    }
-
-    /**
-     * Compare with another model.
-     * @param obj Another model.
-     * @return Whether they are equal.
-     */
-    public boolean equals(final BusinessIndex obj) {
-        return ((Model) this).equals((Model) obj) && stringEquals(serviceName, obj.getServiceName())
-            && startTime == obj.getStartTime() && avgTime == obj.getAvgTime()
-            && num == obj.getNum() && succeeNum == obj.getSucceeNum()
-            && succeeRate == obj.getSucceeRate();
     }
 
     public String getServiceName() {

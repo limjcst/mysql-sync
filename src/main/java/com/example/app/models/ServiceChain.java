@@ -23,16 +23,14 @@ public final class ServiceChain extends Chain {
      * @return Whether they are equal.
      */
     public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
         if (obj == null) {
             return false;
         }
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        return equals(this.getClass().cast(obj));
+        ServiceChain model = (ServiceChain) obj;
+        return ((Chain) this).equals((Chain) model) && stringEquals(serviceName, model.getServiceName());
     }
 
     /**
@@ -41,15 +39,6 @@ public final class ServiceChain extends Chain {
      */
     public int hashCode() {
         return (int) getNo();
-    }
-
-    /**
-     * Compare with another model.
-     * @param obj Another model.
-     * @return Whether they are equal.
-     */
-    public boolean equals(final ServiceChain obj) {
-        return ((Chain) this).equals((Chain) obj) && stringEquals(serviceName, obj.getServiceName());
     }
 
     public String getServiceName() {

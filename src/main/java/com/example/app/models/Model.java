@@ -8,15 +8,6 @@ public abstract class Model {
     private long no = -1;
 
     /**
-     * Compare with another model.
-     * @param obj Another model.
-     * @return Whether they are equal.
-     */
-    public boolean equals(final Model obj) {
-        return no == obj.getNo();
-    }
-
-    /**
      * Compare two String.
      * @param a One String.
      * @param b The other String.

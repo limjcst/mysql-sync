@@ -5,7 +5,31 @@ import com.example.app.models.DSChainMapper;
 
 import org.apache.ibatis.session.SqlSession;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
 public class DSChainTest extends SyncTest<DSChain, DSChainMapper> {
+
+    @Test
+    void testEqual() {
+        DSChain first = createModel(0);
+        assertEquals(true, first.equals(first));
+        assertEquals(false, first.equals(null));
+        assertEquals(false, first.equals(this));
+
+        DSChain second = createModel(0);
+        assertEquals(true, first.equals(second));
+        assertEquals(0, first.hashCode() - second.hashCode());
+        
+        second.setNo(1);
+        assertEquals(false, first.equals(second));
+    
+        second = createModel(0);
+        second.setDsName("another dsName");
+        assertEquals(false, first.equals(second));
+        second.setDsName(null);
+        assertEquals(false, first.equals(second));
+    }
 
     protected DSChain createModel(final long no) {
         DSChain model = new DSChain();

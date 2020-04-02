@@ -54,7 +54,11 @@ public final class PlatformIndex extends Model {
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        return equals(this.getClass().cast(obj));
+        PlatformIndex model = (PlatformIndex) obj;
+        return getNo() == model.getNo() && itemId == model.getItemId()
+            && timestamp == model.getTimestamp() && stringEquals(name, model.getName())
+            && stringEquals(bomcId, model.getBomcId()) && stringEquals(cmdbId, model.getCmdbId())
+            && stringEquals(value, model.getValue());
     }
 
     /**
@@ -63,18 +67,6 @@ public final class PlatformIndex extends Model {
      */
     public int hashCode() {
         return (int) getNo();
-    }
-
-    /**
-     * Compare with another model.
-     * @param obj Another model.
-     * @return Whether they are equal.
-     */
-    public boolean equals(final PlatformIndex obj) {
-        return ((Model) this).equals((Model) obj) && itemId == obj.getItemId()
-            && timestamp == obj.getTimestamp() && stringEquals(name, obj.getName())
-            && stringEquals(bomcId, obj.getBomcId()) && stringEquals(cmdbId, obj.getCmdbId())
-            && stringEquals(value, obj.getValue());
     }
 
     public long getItemId() {

@@ -20,16 +20,14 @@ public final class DSChain extends Chain {
      * @return Whether they are equal.
      */
     public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
         if (obj == null) {
             return false;
         }
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        return equals(this.getClass().cast(obj));
+        DSChain model = (DSChain) obj;
+        return ((Chain) this).equals((Chain) model) && stringEquals(dsName, model.getDsName());
     }
 
     /**
@@ -38,15 +36,6 @@ public final class DSChain extends Chain {
      */
     public int hashCode() {
         return (int) getNo();
-    }
-
-    /**
-     * Compare with another model.
-     * @param obj Another model.
-     * @return Whether they are equal.
-     */
-    public boolean equals(final DSChain obj) {
-        return ((Chain) this).equals((Chain) obj) && stringEquals(dsName, obj.getDsName());
     }
 
     public String getDsName() {

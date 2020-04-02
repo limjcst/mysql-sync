@@ -67,13 +67,8 @@ public class Chain extends Model {
         return (int) getNo();
     }
 
-    /**
-     * Compare with another model.
-     * @param obj Another model.
-     * @return Whether they are equal.
-     */
-    public boolean equals(final Chain obj) {
-        return ((Model) this).equals((Model) obj) && msgTime == obj.getMsgTime()
+    protected final boolean equals(final Chain obj) {
+        return getNo() == obj.getNo() && msgTime == obj.getMsgTime()
             && startTime == obj.getStartTime() && elapsedTime == obj.getElapsedTime()
             && stringEquals(success, obj.getSuccess()) && stringEquals(traceId, obj.getTraceId())
             && stringEquals(id, obj.getId()) && stringEquals(pid, obj.getPid())
