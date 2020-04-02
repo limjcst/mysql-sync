@@ -111,7 +111,12 @@ public final class Syncer {
                     + "\nsrc.prefix=" + srcPrefix + "\ndst.prefix=" + dstPrefix);
     }
 
-    private static SqlSessionFactory prepareSqlSessionFactory(final String resource) throws IOException {
+    /**
+     * Prepare SqlSessionFactory.
+     * @param resource Configuration resource.
+     * @return Configured SqlSessionFactory.
+     */
+    public static SqlSessionFactory prepareSqlSessionFactory(final String resource) throws IOException {
         Reader reader = Resources.getResourceAsReader(resource);
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader);
         factory.getConfiguration().addMapper(PlatformIndexMapper.class);
@@ -123,7 +128,12 @@ public final class Syncer {
         return factory;
     }
 
-    private static void createSchema(final SqlSessionFactory factory, final String prefix) {
+    /**
+     * Create database schema.
+     * @param factory SqlSessionFactory.
+     * @param prefix Prefix for table.
+     */
+    public static void createSchema(final SqlSessionFactory factory, final String prefix) {
         try (SqlSession session = factory.openSession()) {
             PlatformIndexMapper platformIndexMapper = session.getMapper(PlatformIndexMapper.class);
             for (String name : PlatformIndex.TABLE_NAMES) {
@@ -152,7 +162,12 @@ public final class Syncer {
         }
     }
 
-    private static void summary(final SqlSessionFactory factory, final String prefix) {
+    /**
+     * Count existent data.
+     * @param factory SqlSessionFactory.
+     * @param prefix Prefix for table.
+     */
+    public static void summary(final SqlSessionFactory factory, final String prefix) {
         try (SqlSession session = factory.openSession()) {
             Mapper mapper = session.getMapper(PlatformIndexMapper.class);
             for (String name : PlatformIndex.TABLE_NAMES) {
