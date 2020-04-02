@@ -81,8 +81,10 @@ public abstract class SyncTest<E extends Model, M extends Mapper<E>> {
             assertEquals(0, mapper.getCount(DST_TABLE_NAME));
 
             mapper.insert(model, TABLE_NAME);
+            // As model 2 is missed, this model will not be synchronized.
+            mapper.insert(createModel(3), TABLE_NAME);
             session.commit();
-            assertEquals(1, mapper.getCount(TABLE_NAME));
+            assertEquals(2, mapper.getCount(TABLE_NAME));
         }
 
         Syncer syncer = createSyncer();

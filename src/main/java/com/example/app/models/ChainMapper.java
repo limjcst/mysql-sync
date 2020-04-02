@@ -63,7 +63,7 @@ public interface ChainMapper extends Mapper<Chain> {
     @Insert({
         "INSERT INTO ${tablename} (No, startTime, elapsedTime, success, traceId, id, pid, cmdb_id)",
         "VALUES (#{model.no}, #{model.startTime}, #{model.elapsedTime}, #{model.success},",
-        "   #{model.traceId}, #{model.id}, #{model.pid}), #{model.cmdbId}",
+        "   #{model.traceId}, #{model.id}, #{model.pid}, #{model.cmdbId})",
     })
     long insert(@Param("model") Chain chain, @Param("tablename") String tableName);
 
