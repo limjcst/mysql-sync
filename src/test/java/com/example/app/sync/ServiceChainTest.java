@@ -34,9 +34,9 @@ public class ServiceChainTest extends SyncTest<ServiceChain, ServiceChainMapper>
     protected ServiceChain createModel(final long no) {
         ServiceChain model = new ServiceChain();
         model.setNo(no);
-        model.setMsgTime(102);
-        model.setStartTime(100);
-        model.setElapsedTime(3);
+        model.setMsgTime(102L);
+        model.setStartTime(100L);
+        model.setElapsedTime(3.0);
         model.setSuccess("True");
         model.setTraceId("trace-id");
         model.setId("id");

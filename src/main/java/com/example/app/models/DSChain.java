@@ -27,7 +27,7 @@ public final class DSChain extends Chain {
             return false;
         }
         DSChain model = (DSChain) obj;
-        return ((Chain) this).equals((Chain) model) && stringEquals(dsName, model.getDsName());
+        return ((Chain) this).equals((Chain) model) && objectEquals(dsName, model.getDsName());
     }
 
     /**

@@ -25,7 +25,7 @@ public class PlatformIndexTest extends SyncTest<PlatformIndex, PlatformIndexMapp
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
-        second.setItemId(1001);
+        second.setItemId(1001L);
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
@@ -37,7 +37,7 @@ public class PlatformIndexTest extends SyncTest<PlatformIndex, PlatformIndexMapp
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
-        second.setTimestamp(101);
+        second.setTimestamp(101L);
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
@@ -52,10 +52,10 @@ public class PlatformIndexTest extends SyncTest<PlatformIndex, PlatformIndexMapp
     protected PlatformIndex createModel(final long no) {
         PlatformIndex model = new PlatformIndex();
         model.setNo(no);
-        model.setItemId(1000);
+        model.setItemId(1000L);
         model.setName("name");
         model.setBomcId("bomc");
-        model.setTimestamp(100);
+        model.setTimestamp(100L);
         model.setValue("value");
         model.setCmdbId("cmdb");
         return model;

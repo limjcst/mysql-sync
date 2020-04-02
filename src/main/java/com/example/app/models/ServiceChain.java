@@ -30,7 +30,7 @@ public final class ServiceChain extends Chain {
             return false;
         }
         ServiceChain model = (ServiceChain) obj;
-        return ((Chain) this).equals((Chain) model) && stringEquals(serviceName, model.getServiceName());
+        return ((Chain) this).equals((Chain) model) && objectEquals(serviceName, model.getServiceName());
     }
 
     /**

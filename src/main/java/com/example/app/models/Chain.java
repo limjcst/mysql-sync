@@ -11,15 +11,15 @@ public class Chain extends Model {
     /**
      * Message time.
      */
-    private long msgTime;
+    private Long msgTime;
     /**
      * Start time.
      */
-    private long startTime;
+    private Long startTime;
     /**
      * Elapsed time.
      */
-    private double elapsedTime;
+    private Double elapsedTime;
     /**
      * success.
      */
@@ -68,34 +68,34 @@ public class Chain extends Model {
     }
 
     protected final boolean equals(final Chain obj) {
-        return getNo() == obj.getNo() && msgTime == obj.getMsgTime()
-            && startTime == obj.getStartTime() && elapsedTime == obj.getElapsedTime()
-            && stringEquals(success, obj.getSuccess()) && stringEquals(traceId, obj.getTraceId())
-            && stringEquals(id, obj.getId()) && stringEquals(pid, obj.getPid())
-            && stringEquals(cmdbId, obj.getCmdbId());
+        return getNo() == obj.getNo() && objectEquals(msgTime, obj.getMsgTime())
+            && objectEquals(startTime, obj.getStartTime()) && objectEquals(elapsedTime, obj.getElapsedTime())
+            && objectEquals(success, obj.getSuccess()) && objectEquals(traceId, obj.getTraceId())
+            && objectEquals(id, obj.getId()) && objectEquals(pid, obj.getPid())
+            && objectEquals(cmdbId, obj.getCmdbId());
     }
 
-    public final long getMsgTime() {
+    public final Long getMsgTime() {
         return msgTime;
     }
 
-    public final void setMsgTime(final long msgTime) {
+    public final void setMsgTime(final Long msgTime) {
         this.msgTime = msgTime;
     }
 
-    public final long getStartTime() {
+    public final Long getStartTime() {
         return startTime;
     }
 
-    public final void setStartTime(final long startTime) {
+    public final void setStartTime(final Long startTime) {
         this.startTime = startTime;
     }
 
-    public final double getElapsedTime() {
+    public final Double getElapsedTime() {
         return elapsedTime;
     }
 
-    public final void setElapsedTime(final double elapsedTime) {
+    public final void setElapsedTime(final Double elapsedTime) {
         this.elapsedTime = elapsedTime;
     }
 

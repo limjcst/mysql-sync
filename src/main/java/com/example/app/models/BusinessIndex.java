@@ -16,23 +16,23 @@ public final class BusinessIndex extends Model {
     /**
      * startTime.
      */
-    private long startTime;
+    private Long startTime;
     /**
      * avgTime.
      */
-    private double avgTime;
+    private Double avgTime;
     /**
      * num.
      */
-    private long num;
+    private Long num;
     /**
      * succeeNum.
      */
-    private long succeeNum;
+    private Long succeeNum;
     /**
      * succeeRate.
      */
-    private double succeeRate;
+    private Double succeeRate;
 
     /**
      * Compare with another object.
@@ -50,10 +50,10 @@ public final class BusinessIndex extends Model {
             return false;
         }
         BusinessIndex model = (BusinessIndex) obj;
-        return getNo() == model.getNo() && stringEquals(serviceName, model.getServiceName())
-            && startTime == model.getStartTime() && avgTime == model.getAvgTime()
-            && num == model.getNum() && succeeNum == model.getSucceeNum()
-            && succeeRate == model.getSucceeRate();
+        return getNo() == model.getNo() && objectEquals(serviceName, model.getServiceName())
+            && objectEquals(startTime, model.getStartTime()) && objectEquals(avgTime, model.getAvgTime())
+            && objectEquals(num, model.getNum()) && objectEquals(succeeNum, model.getSucceeNum())
+            && objectEquals(succeeRate, model.getSucceeRate());
     }
 
     /**
@@ -72,43 +72,43 @@ public final class BusinessIndex extends Model {
         this.serviceName = serviceName;
     }
 
-    public long getStartTime() {
+    public Long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(final long startTime) {
+    public void setStartTime(final Long startTime) {
         this.startTime = startTime;
     }
 
-    public double getAvgTime() {
+    public Double getAvgTime() {
         return avgTime;
     }
 
-    public void setAvgTime(final double avgTime) {
+    public void setAvgTime(final Double avgTime) {
         this.avgTime = avgTime;
     }
 
-    public long getNum() {
+    public Long getNum() {
         return num;
     }
 
-    public void setNum(final long num) {
+    public void setNum(final Long num) {
         this.num = num;
     }
 
-    public long getSucceeNum() {
+    public Long getSucceeNum() {
         return succeeNum;
     }
 
-    public void setSucceeNum(final long succeeNum) {
+    public void setSucceeNum(final Long succeeNum) {
         this.succeeNum = succeeNum;
     }
 
-    public double getSucceeRate() {
+    public Double getSucceeRate() {
         return succeeRate;
     }
 
-    public void setSucceeRate(final double succeeRate) {
+    public void setSucceeRate(final Double succeeRate) {
         this.succeeRate = succeeRate;
     }
 

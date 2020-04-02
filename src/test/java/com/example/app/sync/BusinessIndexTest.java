@@ -29,34 +29,39 @@ public class BusinessIndexTest extends SyncTest<BusinessIndex, BusinessIndexMapp
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
-        second.setStartTime(101);
+        second.setStartTime(101L);
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
-        second.setAvgTime(101);
+        second.setAvgTime(2.0);
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
-        second.setNum(301);
+        second.setNum(301L);
         assertEquals(false, first.equals(second));
     
         second = createModel(0);
-        second.setSucceeNum(200);
+        second.setSucceeNum(200L);
         assertEquals(false, first.equals(second));
     
         second = createModel(0);
         second.setSucceeRate(0.6);
         assertEquals(false, first.equals(second));
+
+        second.setSucceeRate(null);
+        assertEquals(false, first.equals(second));
+        first.setSucceeRate(null);
+        assertEquals(true, first.equals(second));
     }
 
     protected BusinessIndex createModel(final long no) {
         BusinessIndex model = new BusinessIndex();
         model.setNo(no);
         model.setServiceName("name");
-        model.setStartTime(100);
-        model.setAvgTime(3);
-        model.setNum(300);
-        model.setSucceeNum(299);
+        model.setStartTime(100L);
+        model.setAvgTime(3.0);
+        model.setNum(300L);
+        model.setSucceeNum(299L);
         model.setSucceeRate(0.99);
         return model;
     }

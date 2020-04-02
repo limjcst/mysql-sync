@@ -36,9 +36,9 @@ public class LocalChainTest extends SyncTest<LocalChain, LocalChainMapper> {
     protected LocalChain createModel(final long no) {
         LocalChain model = new LocalChain();
         model.setNo(no);
-        model.setMsgTime(102);
-        model.setStartTime(100);
-        model.setElapsedTime(3);
+        model.setMsgTime(102L);
+        model.setStartTime(100L);
+        model.setElapsedTime(3.0);
         model.setSuccess("True");
         model.setTraceId("trace-id");
         model.setId("id");

@@ -31,8 +31,8 @@ public final class LocalChain extends Chain {
             return false;
         }
         LocalChain model = (LocalChain) obj;
-        return ((Chain) this).equals((Chain) model) && stringEquals(dsName, model.getDsName())
-            && stringEquals(serviceName, model.getServiceName());
+        return ((Chain) this).equals((Chain) model) && objectEquals(dsName, model.getDsName())
+            && objectEquals(serviceName, model.getServiceName());
     }
 
     /**

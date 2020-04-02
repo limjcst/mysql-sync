@@ -25,15 +25,15 @@ public class ChainTest extends SyncTest<Chain, ChainMapper> {
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
-        second.setMsgTime(105);
+        second.setMsgTime(105L);
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
-        second.setStartTime(101);
+        second.setStartTime(101L);
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
-        second.setElapsedTime(5);
+        second.setElapsedTime(5.0);
         assertEquals(false, first.equals(second));
 
         second = createModel(0);
@@ -65,9 +65,9 @@ public class ChainTest extends SyncTest<Chain, ChainMapper> {
     protected Chain createModel(final long no) {
         Chain model = new Chain();
         model.setNo(no);
-        model.setMsgTime(102);
-        model.setStartTime(100);
-        model.setElapsedTime(3);
+        model.setMsgTime(102L);
+        model.setStartTime(100L);
+        model.setElapsedTime(3.0);
         model.setSuccess("True");
         model.setTraceId("trace-id");
         model.setId("id");

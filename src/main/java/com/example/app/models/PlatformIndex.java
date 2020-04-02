@@ -17,7 +17,7 @@ public final class PlatformIndex extends Model {
     /**
      * id for item.
      */
-    private long itemId;
+    private Long itemId;
     /**
      * name.
      */
@@ -29,7 +29,7 @@ public final class PlatformIndex extends Model {
     /**
      * timestamp.
      */
-    private long timestamp;
+    private Long timestamp;
     /**
      * value.
      */
@@ -55,10 +55,10 @@ public final class PlatformIndex extends Model {
             return false;
         }
         PlatformIndex model = (PlatformIndex) obj;
-        return getNo() == model.getNo() && itemId == model.getItemId()
-            && timestamp == model.getTimestamp() && stringEquals(name, model.getName())
-            && stringEquals(bomcId, model.getBomcId()) && stringEquals(cmdbId, model.getCmdbId())
-            && stringEquals(value, model.getValue());
+        return getNo() == model.getNo() && objectEquals(itemId, model.getItemId())
+            && objectEquals(timestamp, model.getTimestamp()) && objectEquals(name, model.getName())
+            && objectEquals(bomcId, model.getBomcId()) && objectEquals(cmdbId, model.getCmdbId())
+            && objectEquals(value, model.getValue());
     }
 
     /**
@@ -69,11 +69,11 @@ public final class PlatformIndex extends Model {
         return (int) getNo();
     }
 
-    public long getItemId() {
+    public Long getItemId() {
         return itemId;
     }
 
-    public void setItemId(final long itemId) {
+    public void setItemId(final Long itemId) {
         this.itemId = itemId;
     }
 
@@ -93,11 +93,11 @@ public final class PlatformIndex extends Model {
         this.bomcId = bomcId;
     }
 
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(final long timestamp) {
+    public void setTimestamp(final Long timestamp) {
         this.timestamp = timestamp;
     }
 

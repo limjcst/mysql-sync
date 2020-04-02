@@ -8,12 +8,12 @@ public abstract class Model {
     private long no = -1;
 
     /**
-     * Compare two String.
-     * @param a One String.
-     * @param b The other String.
+     * Compare two Object.
+     * @param a One Object.
+     * @param b The other Object.
      * @return whether a equals b.
      */
-    public static final boolean stringEquals(final String a, final String b) {
+    public static final boolean objectEquals(final Object a, final Object b) {
         if (a == null) {
             return a == b;
         }

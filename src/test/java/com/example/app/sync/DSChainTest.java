@@ -34,9 +34,9 @@ public class DSChainTest extends SyncTest<DSChain, DSChainMapper> {
     protected DSChain createModel(final long no) {
         DSChain model = new DSChain();
         model.setNo(no);
-        model.setMsgTime(102);
-        model.setStartTime(100);
-        model.setElapsedTime(3);
+        model.setMsgTime(102L);
+        model.setStartTime(100L);
+        model.setElapsedTime(3.0);
         model.setSuccess("True");
         model.setTraceId("trace-id");
         model.setId("id");
