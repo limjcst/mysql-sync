@@ -1,4 +1,7 @@
-package com.example.app.models;
+package com.example.app.sync;
+
+import com.example.app.models.Model;
+import com.example.app.models.Mapper;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -16,9 +19,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public abstract class MapperTest<E extends Model, M extends Mapper<E>> {
+public abstract class SyncTest<E extends Model, M extends Mapper<E>> {
 
     static final String TABLE_NAME = "test";
+    static final String DST_TABLE_NAME = "dst_test";
 
     protected SqlSessionFactory factory = null;
 
@@ -35,6 +39,7 @@ public abstract class MapperTest<E extends Model, M extends Mapper<E>> {
         try (SqlSession session = factory.openSession()) {
             M mapper = getMapper(session);
             mapper.schema(TABLE_NAME);
+            mapper.schema(DST_TABLE_NAME);
         }
     }
 
@@ -42,17 +47,18 @@ public abstract class MapperTest<E extends Model, M extends Mapper<E>> {
     void tearDown() {
         try (SqlSession session = factory.openSession()) {
             session.update("test.drop", TABLE_NAME);
+            session.update("test.drop", DST_TABLE_NAME);
         }
     }
 
     @Test
-    void testUpdate() {
+    void testInsert() {
         try (SqlSession session = factory.openSession()) {
             M mapper = getMapper(session);
             assertEquals(0, mapper.getCount(TABLE_NAME));
             assertEquals(0, mapper.getLatestId(TABLE_NAME));
 
-            E model = createModel();
+            E model = createModel(2);
             mapper.insert(model, TABLE_NAME);
             long id = getId(model);
 
@@ -65,7 +71,35 @@ public abstract class MapperTest<E extends Model, M extends Mapper<E>> {
         }
     }
 
-    protected abstract E createModel();
+    @Test
+    void testSync() {
+        E model = createModel(1);
+        long id = getId(model);
+        try (SqlSession session = factory.openSession()) {
+            M mapper = getMapper(session);
+            assertEquals(0, mapper.getCount(TABLE_NAME));
+            assertEquals(0, mapper.getCount(DST_TABLE_NAME));
+
+            mapper.insert(model, TABLE_NAME);
+            session.commit();
+            assertEquals(1, mapper.getCount(TABLE_NAME));
+        }
+
+        Syncer syncer = createSyncer();
+        assertEquals(1, syncer.sync(TABLE_NAME, DST_TABLE_NAME));
+
+        try (SqlSession session = factory.openSession()) {
+            M mapper = getMapper(session);
+            assertEquals(1, mapper.getCount(DST_TABLE_NAME));
+            assertEquals(id, mapper.getLatestId(DST_TABLE_NAME));
+            List<E> results = mapper.getByRange(0, id + 1, TABLE_NAME);
+            assertArrayEquals(new Object[]{model}, results.toArray());
+        }
+    }
+
+    protected abstract E createModel(long no);
+
+    protected abstract Syncer createSyncer();
 
     protected abstract long getId(E model);
 

@@ -1,12 +1,15 @@
-package com.example.app.models;
+package com.example.app.sync;
+
+import com.example.app.models.DSChain;
+import com.example.app.models.DSChainMapper;
 
 import org.apache.ibatis.session.SqlSession;
 
-public class DSChainMapperTest extends MapperTest<DSChain, DSChainMapper> {
+public class DSChainTest extends SyncTest<DSChain, DSChainMapper> {
 
-    protected DSChain createModel() {
+    protected DSChain createModel(final long no) {
         DSChain model = new DSChain();
-        model.setNo(2);
+        model.setNo(no);
         model.setStartTime(100);
         model.setElapsedTime(3);
         model.setSuccess("True");
@@ -16,6 +19,10 @@ public class DSChainMapperTest extends MapperTest<DSChain, DSChainMapper> {
         model.setCmdbId("cmdb-id");
         model.setDsName("dsName");
         return model;
+    }
+
+    protected DSChainSyncer createSyncer() {
+        return new DSChainSyncer(factory, factory);
     }
 
     protected long getId(final DSChain model) {
