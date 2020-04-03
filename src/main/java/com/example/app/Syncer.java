@@ -114,6 +114,7 @@ public final class Syncer {
     /**
      * Prepare SqlSessionFactory.
      * @param resource Configuration resource.
+     * @throws IOException Failed to read configuration resource.
      * @return Configured SqlSessionFactory.
      */
     public static SqlSessionFactory prepareSqlSessionFactory(final String resource) throws IOException {
@@ -204,6 +205,7 @@ public final class Syncer {
     /**
      * Entrance.
      * @param args Command line arguments
+     * @throws IOException Failed to initialize, or error arises in Prometheus exporter.
      */
     public static void main(final String[] args) throws IOException {
         initialize();
