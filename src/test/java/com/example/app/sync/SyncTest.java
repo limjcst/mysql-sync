@@ -29,6 +29,7 @@ public abstract class SyncTest<E extends Model, M extends Mapper<E>> {
     protected static SqlSessionFactory createSqlSessionFactory() throws IOException {
         Reader reader = Resources.getResourceAsReader("database.xml");
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader);
+        reader.close();
         return factory;
     }
 

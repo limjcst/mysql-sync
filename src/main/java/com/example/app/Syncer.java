@@ -109,6 +109,7 @@ public final class Syncer {
         dstPrefix = parseString(properties.get("dst.prefix"), dstPrefix);
         LOGGER.info("Properties:\ninterval=" + interval + "\nport=" + port
                     + "\nsrc.prefix=" + srcPrefix + "\ndst.prefix=" + dstPrefix);
+        inputStream.close();
     }
 
     /**
@@ -125,7 +126,7 @@ public final class Syncer {
         factory.getConfiguration().addMapper(ServiceChainMapper.class);
         factory.getConfiguration().addMapper(DSChainMapper.class);
         factory.getConfiguration().addMapper(BusinessIndexMapper.class);
-
+        reader.close();
         return factory;
     }
 
